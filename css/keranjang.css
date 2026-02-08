@@ -1,0 +1,15 @@
+.list {
+  padding: 12px;
+}
+
+.item {
+  background: white;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.total {
+  padding: 16px;
+  font-weight: bold;
+}

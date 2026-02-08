@@ -1,0 +1,82 @@
+/* PAGE WRAPPER */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f2f2f2;
+}
+
+/* LOGIN CARD */
+.login-box {
+  background: white;
+  width: 340px;
+  padding: 28px;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+/* TITLE */
+.login-box h2 {
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #777;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+/* ROLE SELECT */
+.role-select {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.role {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  cursor: pointer;
+}
+
+.role.active {
+  background: #2e7d32;
+  color: white;
+  border-color: #2e7d32;
+}
+
+/* FORM */
+.login-box label {
+  font-size: 13px;
+  color: #555;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* LOGIN BUTTON */
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  background: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.login-btn:hover {
+  opacity: 0.9;
+}
