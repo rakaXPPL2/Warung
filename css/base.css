@@ -1,47 +1,48 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
+:root{
+  --bg: #f6f8fa;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --primary: #0f766e; /* theme primary */
+  --accent: #fb923c;
+  --shadow: rgba(2,6,23,0.08);
 }
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+}
+body{
+  background:var(--bg);
+  padding-bottom:88px;
+  color:#0f172a;
+}
+.header{
+  background:var(--card);
+  padding:16px 18px;
+  font-size:20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  box-shadow: 0 4px 18px var(--shadow);
+}
+.header .header-actions{display:flex;gap:12px;align-items:center}
+.header .user{color:var(--muted);font-size:14px}
+.header .logout{background:transparent;border:1px solid var(--primary);color:var(--primary);padding:8px 10px;border-radius:8px;text-decoration:none;font-weight:600}
+.nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  width:100%;
+  background:var(--card);
+  display:flex;
+  justify-content:space-around;
+  padding:10px 0;
+  border-top:1px solid #e6e6e6;
+  box-shadow: 0 -6px 18px rgba(2,6,23,0.03);
+}
+.nav a{ text-decoration:none;color:var(--muted);font-weight:600 }
+.nav .active{ color:var(--primary) }
+.primary-btn{ width:calc(100% - 24px); margin:12px; padding:14px; background:var(--primary); color:white; border:none; border-radius:10px; font-weight:700 }
 
-body {
-  background: #f2f2f2;
-  padding-bottom: 80px;
-}
-
-.header {
-  background: white;
-  padding: 16px;
-  font-size: 20px;
-}
-
-.nav {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: white;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
-  border-top: 1px solid #ccc;
-}
-
-.nav a {
-  text-decoration: none;
-  color: #666;
-}
-
-.nav .active {
-  color: #2e7d32;
-}
-
-.primary-btn {
-  width: calc(100% - 24px);
-  margin: 12px;
-  padding: 14px;
-  background: #2e7d32;
-  color: white;
-  border: none;
-  border-radius: 8px;
-}
