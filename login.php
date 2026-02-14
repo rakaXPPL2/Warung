@@ -1,42 +1,56 @@
 <?php
-include "db_Warung/db_akun.php";
-session_start();
 
+session_start();
 $error = '';
 
-if (isset($_POST['login'])) {
-    $username = trim($_POST['username'] ?? '');
-    $password = $_POST['password'] ?? '';
-    $role     = $_POST['role'] ?? 'pembeli';
-
-    if ($username === '' || $password === '') {
-        $error = 'Isi username dan password.';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
+    $conn = new mysqli("localhost", "root", "", "db_warung");
+    
+    if ($conn->connect_error) {
+        $error = "Koneksi database gagal: " . $conn->connect_error;
     } else {
-        $stmt = $db->prepare("SELECT username, password, role FROM db_akun WHERE username = ? AND role = ? LIMIT 1");
-        $stmt->bind_param('ss', $username, $role);
-        $stmt->execute();
-        $res = $stmt->get_result();
+        $username = trim($_POST['username']);
+        $password = $_POST['password'];
+        $role = $_POST['role'];
 
-        if ($res && $res->num_rows === 1) {
-            $row = $res->fetch_assoc();
-            $hash = $row['password'];
-
-            // Support both hashed passwords and legacy plain-text
-            if ((function_exists('password_verify') && password_verify($password, $hash)) || $password === $hash) {
-                session_regenerate_id(true);
-                $_SESSION['username'] = $row['username'];
-                $_SESSION['role'] = $row['role'];
-
-                header('Location: ' . $row['role'] . '/dashboard.php');
-                exit;
-            } else {
-                $error = 'Username atau password salah.';
-            }
+        $stmt = $conn->prepare("SELECT id, password FROM db_akun WHERE username = ? AND role = ?");
+        if (!$stmt) {
+            $error = "Query error: " . $conn->error;
         } else {
-            $error = 'Akun tidak ditemukan untuk peran yang dipilih.';
+            $stmt->bind_param("ss", $username, $role);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                $user = $result->fetch_assoc();
+                
+                // Cek password (support plain text)
+                if ($password === $user['password']) {
+                    $_SESSION['id'] = $user['id'];
+                    $_SESSION['username'] = $username;
+                    $_SESSION['role'] = $role;
+
+                    if ($role == 'penjual') {
+                        header("Location: penjual/dashboard.php");
+                    } elseif ($role == 'kasir') {
+                        header("Location: kasir/dashboard.php");
+                    } else {
+                        header("Location: pembeli/dashboard.php");
+                    }
+                    exit;
+                } else {
+                    $error = "Password salah!";
+                }
+            } else {
+                $error = "Username atau role tidak ditemukan!";
+            }
+            
+            $stmt->close();
         }
+        $conn->close();
     }
 }
+
 ?>
 
 <!DOCTYPE html>
