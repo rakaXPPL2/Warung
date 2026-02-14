@@ -1,0 +1,206 @@
+/* Styles untuk Pesanan Sukses */
+
+.success-container {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.success-box {
+  background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+  color: white;
+  padding: 40px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  box-shadow: 0 10px 30px rgba(15, 118, 110, 0.2);
+}
+
+.check-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+  display: inline-block;
+  animation: fadeIn 0.6s ease-in;
+}
+
+.success-box h1 {
+  margin: 20px 0;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.success-box p {
+  font-size: 16px;
+  opacity: 0.95;
+  margin: 0;
+}
+
+.nomor-antrian-box {
+  background: white;
+  color: var(--primary);
+  padding: 30px;
+  border-radius: 10px;
+  margin: 20px 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.antrian-label {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.nomor-display {
+  font-size: 48px;
+  font-weight: bold;
+  letter-spacing: 3px;
+  font-family: 'Courier New', monospace;
+  margin: 10px 0;
+}
+
+.antrian-hint {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 10px;
+  font-style: italic;
+}
+
+.metode-info {
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 8px;
+  margin: 20px 0;
+  border-left: 4px solid var(--primary);
+}
+
+.info-item {
+  margin: 12px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info-label {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.info-value {
+  font-weight: bold;
+  color: #071332;
+}
+
+.instructions {
+  background: #fffbeb;
+  border-left: 4px solid #f59e0b;
+  padding: 16px;
+  margin: 20px 0;
+  border-radius: 5px;
+  text-align: left;
+}
+
+.instructions h3 {
+  color: #d97706;
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.instructions ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.instructions li {
+  color: #92400e;
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+.btn-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.btn-main {
+  flex: 1;
+  min-width: 200px;
+  padding: 14px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.btn-main:hover {
+  background: #0d7b72;
+}
+
+.btn-secondary {
+  flex: 1;
+  min-width: 200px;
+  padding: 14px;
+  background: #f1f5f9;
+  color: #071332;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.btn-secondary:hover {
+  background: #e2e8f0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 600px) {
+  .success-container {
+    margin: 20px auto;
+  }
+  
+  .success-box {
+    padding: 30px 20px;
+  }
+  
+  .success-box h1 {
+    font-size: 24px;
+  }
+  
+  .nomor-antrian-box {
+    padding: 20px;
+  }
+  
+  .nomor-display {
+    font-size: 36px;
+  }
+  
+  .btn-group {
+    flex-direction: column;
+  }
+  
+  .btn-main,
+  .btn-secondary {
+    width: 100%;
+  }
+}

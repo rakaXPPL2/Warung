@@ -1,15 +1,138 @@
-.list {
-  padding: 12px;
+.keranjang-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-.item {
-  background: white;
-  padding: 12px;
+.kosong {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+}
+
+.kosong p {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+  background: var(--card);
   border-radius: 10px;
-  margin-bottom: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
-.total {
+.cart-table thead {
+  background: #f8fafc;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.cart-table th {
   padding: 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #071332;
+}
+
+.cart-table td {
+  padding: 16px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #071332;
+}
+
+.cart-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.item-name {
+  font-weight: 600;
+}
+
+.item-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.item-controls input {
+  width: 60px;
+  padding: 6px 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.item-controls button {
+  padding: 6px 12px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.item-controls button:hover {
+  background: #dc2626;
+}
+
+.total-section {
+  background: #f8fafc;
+  padding: 24px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  border: 1px solid #e2e8f0;
+}
+
+.total-section p {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  color: #071332;
+}
+
+.total-harga {
+  display: flex;
+  justify-content: space-between;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--primary);
+  border-top: 2px solid #e2e8f0;
+  padding-top: 16px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.btn-checkout {
+  padding: 12px 24px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.btn-checkout:hover {
+  background: #0d7b72;
+}
+
+.btn-cancel {
+  padding: 12px 24px;
+  background: #f1f5f9;
+  color: #071332;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
   font-weight: bold;
 }

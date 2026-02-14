@@ -1,10 +1,125 @@
-.method {
-  padding: 12px;
+.pembayaran-container {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 20px;
 }
 
-.method div {
+.ringkasan {
+  background: #f8fafc;
+  padding: 24px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  border: 1px solid #e2e8f0;
+}
+
+.ringkasan h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: #071332;
+}
+
+.ringkasan-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #e2e8f0;
+  color: #071332;
+}
+
+.ringkasan-item:last-child {
+  border-bottom: none;
+}
+
+.ringkasan-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 0;
+  margin-top: 16px;
+  border-top: 2px solid #e2e8f0;
+  font-weight: bold;
+  color: var(--primary);
+  font-size: 18px;
+}
+
+.metode-container {
   background: white;
-  padding: 14px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.metode-container h3 {
+  padding: 16px 20px 12px;
+  color: #071332;
+  margin: 0;
+}
+
+.metode-option {
+  display: flex;
+  align-items: flex-start;
+  padding: 20px;
+  margin: 12px 16px;
+  border: 2px solid #e2e8f0;
   border-radius: 10px;
-  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.metode-option:hover {
+  border-color: var(--primary);
+  background: #f0fffe;
+}
+
+.metode-option input[type="radio"] {
+  margin-right: 16px;
+  margin-top: 3px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+
+.metode-text {
+  flex: 1;
+}
+
+.metode-title {
+  font-weight: 600;
+  color: #071332;
+  margin-bottom: 4px;
+  font-size: 16px;
+}
+
+.metode-desc {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.btn-bayar {
+  width: 100%;
+  padding: 16px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 24px;
+  transition: background 0.3s;
+}
+
+.btn-bayar:hover {
+  background: #0d7b72;
+}
+
+.btn-kembali {
+  width: 100%;
+  padding: 12px;
+  background: #f1f5f9;
+  color: #071332;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 12px;
 }

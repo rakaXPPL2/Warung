@@ -31,42 +31,42 @@ $username = $_SESSION['username'];
     <img src="../assets/J.webp" alt="kantin-1">
     <h3>Kantin 1</h3>
     <p>Kantin Bu Rina</p>
-    <button>Pesan</button>
+    <button onclick="location.href='../pesanan.php?kantin=1'">Pesan</button>
   </div>
 
   <div class="card">
     <img src="../assets/J.webp" alt="kantin-2">
     <h3>Kantin 2</h3>
     <p>Kantin Pak Budi</p>
-    <button onclick="location.href='../pesanan.html'">Pesan</button>
+    <button onclick="location.href='../pesanan.php?kantin=2'">Pesan</button>
   </div>
 
   <div class="card">
     <img src="../assets/J.webp" alt="kantin-3">
     <h3>Kantin 3</h3>
     <p>Kantin Pak Budi</p>
-    <button>Pesan</button>
+    <button onclick="location.href='../pesanan.php?kantin=3'">Pesan</button>
   </div>
 
   <div class="card">
     <img src="../assets/J.webp" alt="kantin-4">
     <h3>Kantin 4</h3>
     <p>Kantin Pak Budi</p>
-    <button>Pesan</button>
+    <button onclick="location.href='../pesanan.php?kantin=4'">Pesan</button>
   </div>
 
   <div class="card">
     <img src="../assets/J.webp" alt="kantin-5">
     <h3>Kantin 5</h3>
     <p>Kantin Pak Budi</p>
-    <button>Pesan</button>
+    <button onclick="location.href='../pesanan.php?kantin=5'">Pesan</button>
   </div>
 
   <div class="card">
     <img src="../assets/J.webp" alt="kantin-6">
     <h3>Kantin 6</h3>
     <p>Kantin Pak Budi</p>
-    <button>Pesan</button>
+    <button onclick="location.href='../pesanan.php?kantin=6'">Pesan</button>
   </div>
 </div>
 
