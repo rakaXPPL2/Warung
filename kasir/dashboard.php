@@ -5,21 +5,7 @@ if (!isset($_SESSION['username']) || ($_SESSION['role'] ?? '') !== 'kasir') {
     exit;
 }
 
-$conn = new mysqli("localhost", "root", "", "db_warung");
-
-// Buat tabel jika belum ada
-$conn->query("CREATE TABLE IF NOT EXISTS pesanan (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    pembeli_id INT NOT NULL,
-    pembeli_nama VARCHAR(50),
-    kantin_id INT NOT NULL,
-    nomor_antrian VARCHAR(10) UNIQUE,
-    status ENUM('pending', 'proses', 'selesai', 'diambil') DEFAULT 'pending',
-    metode_pembayaran ENUM('cod', 'online') NOT NULL,
-    total_harga INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-)");
+include '../db_Warung/db_akun.php';
 
 // Handle mark as diambil
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pesanan_id'])) {

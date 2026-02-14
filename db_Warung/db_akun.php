@@ -3,11 +3,11 @@
 $hostname = "localhost";
 $username = "root";
 $password = "";
-$database_name = "db_Warung";
+$database_name = "db_warung";
 
-$db = new mysqli($hostname, $username, $password, $database_name);
+$conn = new mysqli($hostname, $username, $password, $database_name);
 
-if ($db->connect_error) {
-    die("Koneksi gagal: " . $db->connect_error);
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
 }
 ?>

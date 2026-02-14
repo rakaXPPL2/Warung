@@ -4,11 +4,9 @@ session_start();
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
-    $conn = new mysqli("localhost", "root", "", "db_warung");
+    include 'db_Warung/db_akun.php';
     
-    if ($conn->connect_error) {
-        $error = "Koneksi database gagal: " . $conn->connect_error;
-    } else {
+    if ($conn) {
         $username = trim($_POST['username']);
         $password = $_POST['password'];
         $role = $_POST['role'];
@@ -51,6 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     }
 }
 
+$role_selected = $_POST['role'] ?? 'pembeli';
+
 ?>
 
 <!DOCTYPE html>
@@ -74,13 +74,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     <?php endif; ?>
 
     <div class="role-select">
-      <button type="button" class="role <?= (isset($_POST['role']) && $_POST['role']==='pembeli') ? 'active' : 'active' ?>" onclick="setRole('pembeli', this)">Pembeli</button>
-      <button type="button" class="role <?= (isset($_POST['role']) && $_POST['role']==='kasir') ? 'active' : '' ?>" onclick="setRole('kasir', this)">Kasir</button>
-      <button type="button" class="role <?= (isset($_POST['role']) && $_POST['role']==='penjual') ? 'active' : '' ?>" onclick="setRole('penjual', this)">Penjual</button>
+      <button type="button" class="role <?= $role_selected === 'pembeli' ? 'active' : '' ?>" onclick="setRole('pembeli', this)">Pembeli</button>
+      <button type="button" class="role <?= $role_selected === 'kasir' ? 'active' : '' ?>" onclick="setRole('kasir', this)">Kasir</button>
+      <button type="button" class="role <?= $role_selected === 'penjual' ? 'active' : '' ?>" onclick="setRole('penjual', this)">Penjual</button>
     </div>
 
     <form method="post" autocomplete="off">
-      <input type="hidden" name="role" id="role" value="<?= htmlspecialchars($_POST['role'] ?? 'pembeli') ?>">
+      <input type="hidden" name="role" id="role" value="<?= htmlspecialchars($role_selected) ?>">
 
       <label>Username</label>
       <input type="text" placeholder="Masukkan username" name="username" value="<?= htmlspecialchars($_POST['username'] ?? '') ?>">

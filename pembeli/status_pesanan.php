@@ -5,7 +5,7 @@ if (!isset($_SESSION['username']) || ($_SESSION['role'] ?? '') !== 'pembeli') {
     exit;
 }
 
-$conn = new mysqli("localhost", "root", "", "db_warung");
+include '../db_Warung/db_akun.php';
 
 // Get pembeli ID
 $stmt = $conn->prepare("SELECT id FROM db_akun WHERE username = ? AND role = 'pembeli'");

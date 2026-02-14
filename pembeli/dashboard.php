@@ -4,6 +4,11 @@ if (!isset($_SESSION['username']) || ($_SESSION['role'] ?? '') !== 'pembeli') {
     header('Location: ../login.php');
     exit;
 }
+
+include '../db_Warung/db_akun.php';
+
+// Ambil data kantin dari database (Professional Approach)
+$result = $conn->query("SELECT * FROM kantin");
 $username = $_SESSION['username'];
 ?>
 
@@ -27,52 +32,19 @@ $username = $_SESSION['username'];
 </div>
 
 <div class="menu">
-  <div class="card">
-    <img src="../assets/J.webp" alt="kantin-1">
-    <h3>Kantin 1</h3>
-    <p>Kantin Bu Rina</p>
-    <button onclick="location.href='../pesanan.php?kantin=1'">Pesan</button>
-  </div>
-
-  <div class="card">
-    <img src="../assets/J.webp" alt="kantin-2">
-    <h3>Kantin 2</h3>
-    <p>Kantin Pak Budi</p>
-    <button onclick="location.href='../pesanan.php?kantin=2'">Pesan</button>
-  </div>
-
-  <div class="card">
-    <img src="../assets/J.webp" alt="kantin-3">
-    <h3>Kantin 3</h3>
-    <p>Kantin Pak Budi</p>
-    <button onclick="location.href='../pesanan.php?kantin=3'">Pesan</button>
-  </div>
-
-  <div class="card">
-    <img src="../assets/J.webp" alt="kantin-4">
-    <h3>Kantin 4</h3>
-    <p>Kantin Pak Budi</p>
-    <button onclick="location.href='../pesanan.php?kantin=4'">Pesan</button>
-  </div>
-
-  <div class="card">
-    <img src="../assets/J.webp" alt="kantin-5">
-    <h3>Kantin 5</h3>
-    <p>Kantin Pak Budi</p>
-    <button onclick="location.href='../pesanan.php?kantin=5'">Pesan</button>
-  </div>
-
-  <div class="card">
-    <img src="../assets/J.webp" alt="kantin-6">
-    <h3>Kantin 6</h3>
-    <p>Kantin Pak Budi</p>
-    <button onclick="location.href='../pesanan.php?kantin=6'">Pesan</button>
-  </div>
+  <?php while($kantin = $result->fetch_assoc()): ?>
+    <div class="card">
+      <img src="<?= htmlspecialchars($kantin['gambar']) ?>" alt="<?= htmlspecialchars($kantin['nama']) ?>">
+      <h3><?= htmlspecialchars($kantin['nama']) ?></h3>
+      <p><?= htmlspecialchars($kantin['deskripsi']) ?></p>
+      <button onclick="location.href='pesanan.php?kantin=<?= $kantin['id'] ?>'">Pesan</button>
+    </div>
+  <?php endwhile; ?>
 </div>
 
 <div class="nav">
   <a class="active">Beranda</a>
-  <a href="../status.html">Status Pesanan</a>
+  <a href="status_pesanan.php">Status Pesanan</a>
 </div>
 
 </body>

@@ -5,30 +5,7 @@ if (!isset($_SESSION['username']) || ($_SESSION['role'] ?? '') !== 'pembeli') {
     exit;
 }
 
-$conn = new mysqli("localhost", "root", "", "db_warung");
-
-// Buat tabel jika belum ada
-$conn->query("CREATE TABLE IF NOT EXISTS pesanan (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    pembeli_id INT NOT NULL,
-    pembeli_nama VARCHAR(50),
-    kantin_id INT NOT NULL,
-    nomor_antrian VARCHAR(10) UNIQUE,
-    status ENUM('pending', 'proses', 'selesai', 'diambil') DEFAULT 'pending',
-    metode_pembayaran ENUM('cod', 'online') NOT NULL,
-    total_harga INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-)");
-
-$conn->query("CREATE TABLE IF NOT EXISTS pesanan_detail (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    pesanan_id INT NOT NULL,
-    nama_menu VARCHAR(100),
-    harga INT,
-    jumlah INT,
-    FOREIGN KEY (pesanan_id) REFERENCES pesanan(id)
-)");
+include '../db_Warung/db_akun.php';
 
 $username = $_SESSION['username'];
 $keranjang = isset($_SESSION['keranjang']) ? $_SESSION['keranjang'] : [];
@@ -109,7 +86,7 @@ foreach ($keranjang as $item) {
 
 <div class="nav">
   <a href="dashboard.php">Beranda</a>
-  <a href="../status.html">Status Pesanan</a>
+  <a href="status_pesanan.php">Status Pesanan</a>
 </div>
 
 <script>

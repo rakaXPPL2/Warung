@@ -5,30 +5,7 @@ if (!isset($_SESSION['username']) || ($_SESSION['role'] ?? '') !== 'penjual') {
     exit;
 }
 
-$conn = new mysqli("localhost", "root", "", "db_warung");
-
-// Buat tabel jika belum ada
-$conn->query("CREATE TABLE IF NOT EXISTS pesanan (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    pembeli_id INT NOT NULL,
-    pembeli_nama VARCHAR(50),
-    kantin_id INT NOT NULL,
-    nomor_antrian VARCHAR(10) UNIQUE,
-    status ENUM('pending', 'proses', 'selesai', 'diambil') DEFAULT 'pending',
-    metode_pembayaran ENUM('cod', 'online') NOT NULL,
-    total_harga INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-)");
-
-$conn->query("CREATE TABLE IF NOT EXISTS pesanan_detail (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    pesanan_id INT NOT NULL,
-    nama_menu VARCHAR(100),
-    harga INT,
-    jumlah INT,
-    FOREIGN KEY (pesanan_id) REFERENCES pesanan(id)
-)");
+include '../db_Warung/db_akun.php';
 
 // Assume penjual memiliki kantin_id (default 1-6)
 $kantin_id = isset($_SESSION['kantin_id']) ? $_SESSION['kantin_id'] : 1;
@@ -185,7 +162,14 @@ $username = $_SESSION['username'];
           <?php endif; ?>
           
           <?php if ($pesanan['status'] === 'selesai'): ?>
-            <span class="status-badge status-selesai" style="margin: 0;">✅ Siap Diambil</span>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="status-badge status-selesai" style="margin: 0;">✅ Siap Diambil</span>
+              <form method="post" style="margin: 0;">
+                <input type="hidden" name="pesanan_id" value="<?= $pesanan['id'] ?>">
+                <input type="hidden" name="status" value="diambil">
+                <button type="submit" class="btn" style="background: #f3e8ff; color: #581c87;">🎉 Pesanan Diambil</button>
+              </form>
+            </div>
           <?php endif; ?>
         </div>
       </div>

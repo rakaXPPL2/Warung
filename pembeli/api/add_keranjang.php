@@ -17,12 +17,20 @@ if (!isset($_SESSION['keranjang'])) {
     $_SESSION['keranjang'] = [];
 }
 
-// Track kantin_id
-$_SESSION['kantin_id'] = $data['kantin_id'];
-
 $nama = $data['nama'];
 $harga = (int)$data['harga'];
 $kantin_id = (int)$data['kantin_id'];
+
+// Cek konsistensi kantin: Jika item baru dari kantin berbeda, reset keranjang
+if (!empty($_SESSION['keranjang'])) {
+    $first_item = reset($_SESSION['keranjang']);
+    if (isset($first_item['kantin_id']) && $first_item['kantin_id'] !== $kantin_id) {
+        $_SESSION['keranjang'] = []; // Reset keranjang
+    }
+}
+
+// Track kantin_id aktif
+$_SESSION['kantin_id'] = $kantin_id;
 
 // Cek apakah sudah ada di keranjang
 $found = false;

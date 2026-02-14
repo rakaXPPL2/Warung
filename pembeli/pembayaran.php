@@ -5,11 +5,17 @@ if (!isset($_SESSION['username']) || ($_SESSION['role'] ?? '') !== 'pembeli') {
     exit;
 }
 
-$conn = new mysqli("localhost", "root", "", "db_warung");
+include '../db_Warung/db_akun.php';
 
 $username = $_SESSION['username'];
 $keranjang = isset($_SESSION['keranjang']) ? $_SESSION['keranjang'] : [];
 $kantin_id = isset($_SESSION['kantin_id']) ? $_SESSION['kantin_id'] : 1;
+
+// Cek jika keranjang kosong
+if (empty($keranjang)) {
+    header('Location: dashboard.php');
+    exit;
+}
 
 $total = 0;
 foreach ($keranjang as $item) {
@@ -118,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['metode_pembayaran']))
 
 <div class="nav">
   <a href="dashboard.php">Beranda</a>
-  <a href="../status.html">Status Pesanan</a>
+  <a href="status_pesanan.php">Status Pesanan</a>
 </div>
 
 </body>
