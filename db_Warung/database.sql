@@ -7,14 +7,19 @@ CREATE TABLE IF NOT EXISTS db_akun (
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     role ENUM('penjual', 'pembeli', 'kasir') NOT NULL,
-    nama_lengkap VARCHAR(100)
+    nama_lengkap VARCHAR(100),
+    kantin_id INT DEFAULT NULL
 );
 
 -- Insert akun default untuk testing
-INSERT INTO db_akun (username, password, role, nama_lengkap) VALUES 
-('penjual', 'penjual', 'penjual', 'Penjual Kantin 1'),
-('pembeli', 'pembeli', 'pembeli', 'Pembeli Test'),
-('kasir', 'kasir', 'kasir', 'Kasir Utama');
+-- contoh beberapa penjual masing-masing memiliki kantin_id
+INSERT INTO db_akun (username, password, role, nama_lengkap, kantin_id) VALUES 
+('penjual1', 'penjual', 'penjual', 'Penjual Kantin 1', 1),
+('penjual2', 'penjual', 'penjual', 'Penjual Kantin 2', 2),
+('penjual3', 'penjual', 'penjual', 'Penjual Kantin 3', 3),
+('penjual4', 'penjual', 'penjual', 'Penjual Kantin 4', 4),
+('pembeli', 'pembeli', 'pembeli', 'Pembeli Test', NULL),
+('kasir', 'kasir', 'kasir', 'Kasir Utama', NULL);
 
 -- Tabel Pesanan
 CREATE TABLE IF NOT EXISTS pesanan (
@@ -26,6 +31,7 @@ CREATE TABLE IF NOT EXISTS pesanan (
     status ENUM('pending', 'proses', 'selesai', 'diambil') DEFAULT 'pending',
     metode_pembayaran ENUM('cod', 'online') NOT NULL,
     total_harga INT,
+    catatan VARCHAR(255) DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -52,9 +58,7 @@ INSERT INTO kantin (id, nama, deskripsi) VALUES
 (1, 'Kantin Bu Rina', 'Masakan rumahan yang lezat'),
 (2, 'Kantin Pak Budi', 'Spesialis nasi goreng dan mie'),
 (3, 'Kantin 3', 'Aneka jajanan dan minuman'),
-(4, 'Kantin 4', 'Western food dan kopi'),
-(5, 'Kantin 5', 'Masakan nusantara'),
-(6, 'Kantin 6', 'Seafood dan gorengan');
+(4, 'Kantin 4', 'Western food dan kopi');
 
 -- Tabel Menu (Agar menu tidak hardcoded di PHP)
 CREATE TABLE IF NOT EXISTS menu (
@@ -64,37 +68,49 @@ CREATE TABLE IF NOT EXISTS menu (
     harga INT NOT NULL,
     gambar VARCHAR(255),
     kategori ENUM('makanan', 'minuman', 'snack') NOT NULL,
+    flavor_options TEXT DEFAULT NULL,
+    spicy TINYINT(1) DEFAULT 0,
+    spicy_levels INT DEFAULT 5,
     FOREIGN KEY (kantin_id) REFERENCES kantin(id)
 );
 
 -- Seed Data Menu (Memindahkan dari array PHP ke SQL)
-INSERT INTO menu (kantin_id, nama, harga, gambar, kategori) VALUES
+-- all images use a common placeholder template URL for convenience
+SET @placeholder = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-Wn0wYYlJX1a8whqKxKiqodeNxNrZ6IpSgQ&s';
+
+INSERT INTO menu (kantin_id, nama, harga, gambar, kategori, flavor_options, spicy, spicy_levels) VALUES
 -- Kantin 1
-(1, 'Lumpia Basah', 6000, '../assets/lumpia.webp', 'makanan'),
-(1, 'Perkedel', 3000, '../assets/J.webp', 'makanan'),
-(1, 'Tahu Goreng', 2500, '../assets/J.webp', 'makanan'),
-(1, 'Teh Manis', 2000, '../assets/J.webp', 'minuman'),
-(1, 'Es Campur', 5000, '../assets/J.webp', 'minuman'),
-(1, 'Roti Bakar', 4000, '../assets/J.webp', 'snack'),
+(1, 'Lumpia Basah', 6000, @placeholder, 'makanan', NULL, 0, 5),
+(1, 'Perkedel', 3000, @placeholder, 'makanan', NULL, 0, 5),
+(1, 'Tahu Goreng', 2500, @placeholder, 'makanan', NULL, 1, 5),
+(1, 'Teh Manis', 2000, @placeholder, 'minuman', 'manis,asen', 0, 5),
+(1, 'Es Campur', 5000, @placeholder, 'minuman', 'coklat,vanila', 0, 5),
+(1, 'Roti Bakar', 4000, @placeholder, 'snack', NULL, 0, 5),
+(1, 'Sate Ayam', 8000, @placeholder, 'makanan', NULL, 1, 5),
+(1, 'Nasi Uduk', 7000, @placeholder, 'makanan', NULL, 0, 5),
+(1, 'Jus Alpukat', 6000, @placeholder, 'minuman', 'manis', 0, 5),
 -- Kantin 2
-(2, 'Nasi Goreng', 12000, '../assets/nasgor.jpg', 'makanan'),
-(2, 'Mie Goreng', 10000, '../assets/J.webp', 'makanan'),
-(2, 'Soto Ayam', 12000, '../assets/J.webp', 'makanan'),
-(2, 'Cibay', 1000, '../assets/cibay.jpg', 'minuman'),
-(2, 'Milkshake', 6000, '../assets/milkshake.jpg', 'minuman'),
-(2, 'Pisang Goreng', 3000, '../assets/J.webp', 'snack'),
+(2, 'Nasi Goreng', 12000, @placeholder, 'makanan', NULL, 1, 5),
+(2, 'Mie Goreng', 10000, @placeholder, 'makanan', NULL, 0, 5),
+(2, 'Soto Ayam', 12000, @placeholder, 'makanan', NULL, 0, 5),
+(2, 'Cibay', 1000, @placeholder, 'minuman', 'cola,orange', 0, 5),
+(2, 'Milkshake', 6000, @placeholder, 'minuman', 'vanila,stroberi', 0, 5),
+(2, 'Pisang Goreng', 3000, @placeholder, 'snack', NULL, 0, 5),
+(2, 'Burger Keju', 11000, @placeholder, 'makanan', NULL, 0, 5),
+(2, 'Es Teh', 2000, @placeholder, 'minuman', 'manis', 0, 5),
+(2, 'Kentang Goreng', 5000, @placeholder, 'snack', NULL, 0, 5),
 -- Kantin 3
-(3, 'Bakso Ayam', 8000, '../assets/J.webp', 'makanan'),
-(3, 'Gado-gado', 5000, '../assets/J.webp', 'makanan'),
-(3, 'Kare Ayam', 11000, '../assets/J.webp', 'makanan'),
-(3, 'Jus Jeruk', 4000, '../assets/J.webp', 'minuman'),
+(3, 'Bakso Ayam', 8000, @placeholder, 'makanan', NULL, 0, 5),
+(3, 'Gado-gado', 5000, @placeholder, 'makanan', NULL, 0, 5),
+(3, 'Kare Ayam', 11000, @placeholder, 'makanan', NULL, 1, 5),
+(3, 'Jus Jeruk', 4000, @placeholder, 'minuman', 'asgari,manis', 0, 5),
+(3, 'Pempek', 7000, @placeholder, 'snack', NULL, 0, 5),
+(3, 'Nasi Padang', 13000, @placeholder, 'makanan', NULL, 0, 5),
+(3, 'Teh Tarik', 3000, @placeholder, 'minuman', 'manis', 0, 5),
 -- Kantin 4
-(4, 'Rendang Daging', 15000, '../assets/J.webp', 'makanan'),
-(4, 'Spaghetti', 13000, '../assets/J.webp', 'makanan'),
-(4, 'Burger', 10000, '../assets/J.webp', 'makanan'),
--- Kantin 5
-(5, 'Tongseng', 14000, '../assets/J.webp', 'makanan'),
-(5, 'Capcay', 6000, '../assets/J.webp', 'makanan'),
--- Kantin 6
-(6, 'Ikan Goreng', 12000, '../assets/J.webp', 'makanan'),
-(6, 'Udang Keju', 14000, '../assets/J.webp', 'makanan');
+(4, 'Rendang Daging', 15000, @placeholder, 'makanan', NULL, 1, 5),
+(4, 'Spaghetti', 13000, @placeholder, 'makanan', NULL, 0, 5),
+(4, 'Burger', 10000, @placeholder, 'makanan', NULL, 0, 5),
+(4, 'Pizza', 20000, @placeholder, 'makanan', NULL, 0, 5),
+(4, 'Ice Cream', 5000, @placeholder, 'snack', NULL, 0, 5);
+

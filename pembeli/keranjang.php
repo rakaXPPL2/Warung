@@ -57,7 +57,15 @@ foreach ($keranjang as $item) {
       <tbody>
         <?php foreach ($keranjang as $index => $item): ?>
         <tr>
-          <td><?= htmlspecialchars($item['nama']) ?></td>
+          <td>
+            <?= htmlspecialchars($item['nama']) ?>
+            <?php if (isset($item['flavor'])): ?>
+              <div style="font-size:12px;color:var(--muted);">Rasa: <?= htmlspecialchars($item['flavor']) ?></div>
+            <?php endif; ?>
+            <?php if (isset($item['spicy_level'])): ?>
+              <div style="font-size:12px;color:var(--muted);">Pedas level <?= htmlspecialchars($item['spicy_level']) ?></div>
+            <?php endif; ?>
+          </td>
           <td style="text-align: center;">Rp <?= number_format($item['harga'], 0, ',', '.') ?></td>
           <td style="text-align: center;">
             <input type="number" value="<?= $item['jumlah'] ?>" min="1" onchange="updateJumlah(<?= $index ?>, this.value)">

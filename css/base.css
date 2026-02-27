@@ -42,7 +42,17 @@ body{
   border-top:1px solid #e6e6e6;
   box-shadow: 0 -6px 18px rgba(2,6,23,0.03);
 }
-.nav a{ text-decoration:none;color:var(--muted);font-weight:600 }
+.nav a{ text-decoration:none;color:#9ca3af;/* lighter grey */font-weight:600 }
 .nav .active{ color:var(--primary) }
+.nav a:hover{color:var(--primary)}
 .primary-btn{ width:calc(100% - 24px); margin:12px; padding:14px; background:var(--primary); color:white; border:none; border-radius:10px; font-weight:700 }
+
+/* general table style for better look */
+table{width:100%;border-collapse:collapse;margin:12px 0}
+th, td{padding:8px;border:1px solid #e2e8f0;text-align:left}
+
+/* button utility */
+.btn{padding:8px 14px;border:none;border-radius:6px;cursor:pointer;font-weight:600}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-secondary{background:#f1f5f9;color:var(--muted)}
 

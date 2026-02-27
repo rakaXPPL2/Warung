@@ -123,3 +123,14 @@
   font-weight: bold;
   margin-top: 12px;
 }
+
+/* catatan field style */
+.note-field textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  resize: vertical;
+  margin-bottom: 12px;
+}

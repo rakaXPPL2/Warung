@@ -11,6 +11,9 @@ if (!isset($data['nama']) || !isset($data['harga']) || !isset($data['kantin_id']
     http_response_code(400);
     exit;
 }
+// optional customization
+$flavor = isset($data['flavor']) ? trim($data['flavor']) : null;
+$spicy_level = isset($data['spicy_level']) ? (int)$data['spicy_level'] : null;
 
 // Initialize keranjang if not exists
 if (!isset($_SESSION['keranjang'])) {
@@ -35,7 +38,9 @@ $_SESSION['kantin_id'] = $kantin_id;
 // Cek apakah sudah ada di keranjang
 $found = false;
 foreach ($_SESSION['keranjang'] as &$item) {
-    if ($item['nama'] === $nama && $item['kantin_id'] === $kantin_id) {
+    if ($item['nama'] === $nama && $item['kantin_id'] === $kantin_id
+        && ($item['flavor'] ?? null) === $flavor
+        && ($item['spicy_level'] ?? null) === $spicy_level) {
         $item['jumlah'] += 1;
         $found = true;
         break;
@@ -44,12 +49,15 @@ foreach ($_SESSION['keranjang'] as &$item) {
 
 // Jika belum ada, tambah item baru
 if (!$found) {
-    $_SESSION['keranjang'][] = [
+    $item = [
         'nama' => $nama,
         'harga' => $harga,
         'kantin_id' => $kantin_id,
         'jumlah' => 1
     ];
+    if ($flavor !== null) $item['flavor'] = $flavor;
+    if ($spicy_level !== null) $item['spicy_level'] = $spicy_level;
+    $_SESSION['keranjang'][] = $item;
 }
 
 http_response_code(200);

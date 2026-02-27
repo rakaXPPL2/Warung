@@ -11,7 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         $password = $_POST['password'];
         $role = $_POST['role'];
 
-        $stmt = $conn->prepare("SELECT id, password FROM db_akun WHERE username = ? AND role = ?");
+        // also retrieve kantin_id so we can remember which kantin penjual owns
+        $stmt = $conn->prepare("SELECT id, password, kantin_id FROM db_akun WHERE username = ? AND role = ?");
         if (!$stmt) {
             $error = "Query error: " . $conn->error;
         } else {
@@ -27,6 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                     $_SESSION['id'] = $user['id'];
                     $_SESSION['username'] = $username;
                     $_SESSION['role'] = $role;
+                    // store kantin_id if available (null for non-penjual)
+                    $_SESSION['kantin_id'] = $user['kantin_id'] ?? null;
 
                     if ($role == 'penjual') {
                         header("Location: penjual/dashboard.php");
@@ -90,7 +93,7 @@ $role_selected = $_POST['role'] ?? 'pembeli';
 
       <button class="login-btn" name="login">Login</button>
     </form>
-
+    <p style="margin-top:20px; font-size:14px; text-align:center;">Belum punya akun? <a href="register.php">Daftar di sini</a></p>
   </div>
 </div>
 <script>

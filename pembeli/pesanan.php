@@ -53,7 +53,6 @@ $username = $_SESSION['username'];
   <button class="active" onclick="filterMenu('semua')">Semua</button>
   <button onclick="filterMenu('makanan')">Makanan</button>
   <button onclick="filterMenu('minuman')">Minuman</button>
-  <button onclick="filterMenu('snack')">Snack</button>
 </div>
 
 <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 1px solid #e2e8f0;">
@@ -64,12 +63,33 @@ $username = $_SESSION['username'];
 </div>
 
 <div class="menu">
-  <?php while ($item = $menu_items->fetch_assoc()): ?>
-  <div class="card" data-kategori="<?= htmlspecialchars($item['kategori']) ?>">
+  <?php while ($item = $menu_items->fetch_assoc()):
+        $flavors = htmlspecialchars($item['flavor_options']);
+        $hasSpicy = $item['spicy'] ? '1' : '0';
+        $maxLevel = (int)$item['spicy_levels'];
+    ?>
+  <div class="card" data-kategori="<?= htmlspecialchars($item['kategori']) ?>"
+       data-flavors="<?= $flavors ?>" data-spicy="<?= $hasSpicy ?>" data-levels="<?= $maxLevel ?>">
+    <?php if ($flavors):
+            $list = explode(',', $flavors);
+    ?>
+    <div class="flavor-options" style="margin:8px 0; font-size:12px; color:var(--muted);">
+      Pilih rasa:
+      <?php foreach($list as $fl): $ftrim=trim($fl); if($ftrim): ?>
+        <label style="margin-right:6px;"><input type="checkbox" value="<?= htmlspecialchars($ftrim) ?>"> <?= htmlspecialchars($ftrim) ?></label>
+      <?php endif; endforeach; ?>
+    </div>
+    <?php endif; ?>
     <img src="<?= htmlspecialchars($item['gambar']) ?>" alt="<?= htmlspecialchars($item['nama']) ?>">
     <h3><?= htmlspecialchars($item['nama']) ?></h3>
+    <?php if ($flavors): ?>
+      <div style="font-size:12px;color:var(--muted);">Rasa: <?= nl2br(htmlspecialchars($flavors)) ?></div>
+    <?php endif; ?>
+    <?php if ($hasSpicy): ?>
+      <div style="font-size:12px;color:#dc2626;">Opsional pedas</div>
+    <?php endif; ?>
     <p>Harga Rp <?= number_format($item['harga'], 0, ',', '.') ?></p>
-    <button onclick="tambahKeranjang('<?= htmlspecialchars($item['nama']) ?>', <?= $item['harga'] ?>, <?= $kantin_id ?>)">Pesan</button>
+    <button onclick="tambahKeranjang(this, '<?= htmlspecialchars($item['nama']) ?>', <?= $item['harga'] ?>, <?= $kantin_id ?>)">Pesan</button>
   </div>
   <?php endwhile; ?>
 </div>
@@ -96,15 +116,36 @@ function filterMenu(kategori) {
   });
 }
 
-function tambahKeranjang(nama, harga, kantinId) {
+function tambahKeranjang(btn, nama, harga, kantinId) {
+  // read options from card
+  const card = btn.closest('.card');
+  const flavors = card.dataset.flavors;
+  const hasSpicy = card.dataset.spicy === '1';
+  const maxLevel = parseInt(card.dataset.levels) || 0;
+
+  let payload = { nama, harga, kantin_id: kantinId };
+
+  if (flavors) {
+    // collect checked boxes
+    const boxes = card.querySelectorAll('.flavor-options input[type=checkbox]:checked');
+    if (boxes.length) {
+      payload.flavor = Array.from(boxes).map(b=>b.value).join(', ');
+    }
+  }
+  if (hasSpicy) {
+    if (confirm('Mau pedas?')) {
+      let lvl = prompt('Level pedas (1-'+maxLevel+'):', '1');
+      lvl = parseInt(lvl);
+      if (!isNaN(lvl) && lvl > 0) {
+        payload.spicy_level = Math.min(lvl, maxLevel);
+      }
+    }
+  }
+
   fetch('api/add_keranjang.php', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ 
-      nama: nama, 
-      harga: harga, 
-      kantin_id: kantinId 
-    })
+    body: JSON.stringify(payload)
   })
   .then(res => res.json())
   .then(data => {

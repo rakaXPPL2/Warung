@@ -74,6 +74,12 @@ $username = $_SESSION['username'];
         </div>
 
         <div class="pesanan-detail">
+          <?php if (!empty($pesanan['catatan'])): ?>
+          <div class="detail-row">
+            <span class="label">Catatan:</span>
+            <span class="value"><?= htmlspecialchars($pesanan['catatan']) ?></span>
+          </div>
+          <?php endif; ?>
           <div class="detail-row">
             <span class="label">Metode Pembayaran:</span>
             <span class="value"><?= $pesanan['metode_pembayaran'] === 'cod' ? '💵 Bayar di Tempat' : '🏧 Transfer' ?></span>

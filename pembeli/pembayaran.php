@@ -11,6 +11,12 @@ $username = $_SESSION['username'];
 $keranjang = isset($_SESSION['keranjang']) ? $_SESSION['keranjang'] : [];
 $kantin_id = isset($_SESSION['kantin_id']) ? $_SESSION['kantin_id'] : 1;
 
+// migration: add catatan column if missing
+$check = $conn->query("SHOW COLUMNS FROM pesanan LIKE 'catatan'");
+if ($check && $check->num_rows === 0) {
+    $conn->query("ALTER TABLE pesanan ADD COLUMN catatan VARCHAR(255) DEFAULT NULL");
+}
+
 // Cek jika keranjang kosong
 if (empty($keranjang)) {
     header('Location: dashboard.php');
@@ -27,6 +33,7 @@ $nomor_antrian = strtoupper(substr(uniqid(), -6));
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['metode_pembayaran'])) {
     $metode = $_POST['metode_pembayaran'];
+    $catatan = trim($_POST['catatan'] ?? '');
     
     // Cek ID pembeli dari db
     $stmt = $conn->prepare("SELECT id FROM db_akun WHERE username = ? AND role = 'pembeli'");
@@ -37,17 +44,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['metode_pembayaran']))
     $pembeli_id = $pembeli['id'] ?? 1;
     
     // Insert pesanan
-    $stmt = $conn->prepare("INSERT INTO pesanan (pembeli_id, pembeli_nama, kantin_id, nomor_antrian, metode_pembayaran, total_harga, status) 
-                            VALUES (?, ?, ?, ?, ?, ?, 'pending')");
-    $stmt->bind_param("isisis", $pembeli_id, $username, $kantin_id, $nomor_antrian, $metode, $total);
+    $stmt = $conn->prepare("INSERT INTO pesanan (pembeli_id, pembeli_nama, kantin_id, nomor_antrian, metode_pembayaran, total_harga, catatan, status) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?, 'pending')");
+    $stmt->bind_param("isisiss", $pembeli_id, $username, $kantin_id, $nomor_antrian, $metode, $total, $catatan);
     $stmt->execute();
     $pesanan_id = $conn->insert_id;
     
     // Insert detail pesanan
     foreach ($keranjang as $item) {
+        $menuName = $item['nama'];
+        if (isset($item['flavor'])) {
+            $menuName .= " (" . $item['flavor'] . ")";
+        }
+        if (isset($item['spicy_level'])) {
+            $menuName .= " - Pedas lvl " . $item['spicy_level'];
+        }
         $stmt = $conn->prepare("INSERT INTO pesanan_detail (pesanan_id, nama_menu, harga, jumlah) 
                                 VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("isii", $pesanan_id, $item['nama'], $item['harga'], $item['jumlah']);
+        $stmt->bind_param("isii", $pesanan_id, $menuName, $item['harga'], $item['jumlah']);
         $stmt->execute();
     }
     
@@ -85,7 +99,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['metode_pembayaran']))
     <h3>Ringkasan Pesanan</h3>
     <?php foreach ($keranjang as $item): ?>
       <div class="ringkasan-item">
-        <span><?= htmlspecialchars($item['nama']) ?> x <?= $item['jumlah'] ?></span>
+        <span>
+          <?= htmlspecialchars($item['nama']) ?> x <?= $item['jumlah'] ?>
+          <?php if (isset($item['flavor'])): ?>
+            <br><small>Rasa: <?= htmlspecialchars($item['flavor']) ?></small>
+          <?php endif; ?>
+          <?php if (isset($item['spicy_level'])): ?>
+            <br><small>Pedas lvl <?= htmlspecialchars($item['spicy_level']) ?></small>
+          <?php endif; ?>
+        </span>
         <span>Rp <?= number_format($item['harga'] * $item['jumlah'], 0, ',', '.') ?></span>
       </div>
     <?php endforeach; ?>
@@ -99,6 +121,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['metode_pembayaran']))
     <h3>Pilih Metode Pembayaran</h3>
     
     <form method="post">
+      <div class="note-field">
+        <label>Catatan untuk penjual (mis. jangan pedas):</label>
+        <textarea name="catatan" rows="2"></textarea>
+      </div>
+
       <label class="metode-option">
         <input type="radio" name="metode_pembayaran" value="cod" required>
         <div class="metode-text">
