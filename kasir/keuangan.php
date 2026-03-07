@@ -51,9 +51,9 @@ $username = $_SESSION['username'];
 </div>
 
 <footer class="nav">
-  <a href="dashboard.php">Beranda</a>
-  <a href="history.php">Riwayat Pesanan</a>
-  <a class="active">Kantin</a>
+  <a href="dashboard.php">🏠 Beranda</a>
+  <a href="history.php">📜 Riwayat Pesanan</a>
+  <a class="active">🏫 Kantin</a>
 </footer>
 
 </body>

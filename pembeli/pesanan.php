@@ -31,82 +31,260 @@ $username = $_SESSION['username'];
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Pesanan - <?= htmlspecialchars($kantin['nama']) ?></title>
-  <link rel="stylesheet" href="../css/base.css">
-  <link rel="stylesheet" href="../css/beranda.css">
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+      padding-bottom: 80px;
+    }
+    .navbar-custom {
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .filter-buttons {
+      display: flex;
+      gap: 10px;
+      padding: 16px;
+      justify-content: center;
+      background: white;
+      margin-bottom: 20px;
+      border-radius: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .filter-btn {
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: none;
+      background: #f8f9fa;
+      color: #6c757d;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .filter-btn.active {
+      background: #28a745;
+      color: white;
+    }
+    .filter-btn:hover {
+      background: #28a745;
+      color: white;
+      transform: translateY(-2px);
+    }
+    .menu-header {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      padding: 0 16px;
+    }
+    .menu-card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+      text-align: center;
+      padding: 20px;
+    }
+    .menu-card:hover {
+      transform: translateY(-5px);
+    }
+    .menu-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    .menu-card h3 {
+      color: #28a745;
+      font-weight: 600;
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+    .menu-card .spicy-badge {
+      background: #dc3545;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 10px;
+      font-size: 12px;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+    .menu-card p {
+      color: #6c757d;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+    .menu-card button {
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+    .menu-card button:hover {
+      background: linear-gradient(135deg, #20c997 0%, #28a745 100%);
+      transform: translateY(-2px);
+    }
+    .cart-button {
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .cart-button:hover {
+      background: linear-gradient(135deg, #20c997 0%, #28a745 100%);
+      transform: translateY(-2px);
+    }
+    .footer-nav {
+      background: white;
+      border-top: 1px solid #e9ecef;
+      padding: 15px 0;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+    .footer-nav a {
+      text-decoration: none;
+      color: #6c757d;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      margin: 0 5px;
+    }
+    .footer-nav a.active {
+      background: #28a745;
+      color: white;
+    }
+    .footer-nav a:hover {
+      background: #28a745;
+      color: white;
+      transform: translateY(-2px);
+    }
+  </style>
 </head>
 <body>
 
-<div class="header">
-  <h1><?= htmlspecialchars($kantin['nama']) ?></h1>
-  <div class="header-actions">
-    <span class="user">Halo, <?= htmlspecialchars($username) ?></span>
-    <a class="logout" href="../logout.php">Logout</a>
-  </div>
-</div>
-
-<div class="filter">
-  <button class="active" onclick="filterMenu('semua')">Semua</button>
-  <button onclick="filterMenu('makanan')">Makanan</button>
-  <button onclick="filterMenu('minuman')">Minuman</button>
-</div>
-
-<div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 1px solid #e2e8f0;">
-  <h3 style="margin: 0;">Menu <?= htmlspecialchars($kantin['nama']) ?></h3>
-  <button onclick="location.href='keranjang.php'" style="padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
-    🛒 Lihat Keranjang (<?php echo isset($_SESSION['keranjang']) ? count($_SESSION['keranjang']) : 0; ?>)
-  </button>
-</div>
-
-<div class="menu">
-  <?php while ($item = $menu_items->fetch_assoc()):
-        $flavors = htmlspecialchars($item['flavor_options']);
-        $hasSpicy = $item['spicy'] ? '1' : '0';
-        $maxLevel = (int)$item['spicy_levels'];
-    ?>
-  <div class="card" data-kategori="<?= htmlspecialchars($item['kategori']) ?>"
-       data-flavors="<?= $flavors ?>" data-spicy="<?= $hasSpicy ?>" data-levels="<?= $maxLevel ?>">
-    <?php if ($flavors):
-            $list = explode(',', $flavors);
-    ?>
-    <div class="flavor-options" style="margin:8px 0; font-size:12px; color:var(--muted);">
-      Pilih rasa:
-      <?php foreach($list as $fl): $ftrim=trim($fl); if($ftrim): ?>
-        <label style="margin-right:6px;"><input type="checkbox" value="<?= htmlspecialchars($ftrim) ?>"> <?= htmlspecialchars($ftrim) ?></label>
-      <?php endif; endforeach; ?>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom">
+  <div class="container">
+    <a class="navbar-brand" href="#">
+      <i class="fas fa-store me-2"></i><?= htmlspecialchars($kantin['nama']) ?>
+    </a>
+    <div class="d-flex align-items-center">
+      <span class="text-white me-3">
+        <i class="fas fa-user-circle me-1"></i>Halo, <?= htmlspecialchars($username) ?>
+      </span>
+      <a href="../logout.php" class="btn btn-outline-light btn-sm rounded-pill">
+        <i class="fas fa-sign-out-alt me-1"></i>Logout
+      </a>
     </div>
-    <?php endif; ?>
-    <img src="<?= htmlspecialchars($item['gambar']) ?>" alt="<?= htmlspecialchars($item['nama']) ?>">
-    <h3><?= htmlspecialchars($item['nama']) ?></h3>
-    <?php if ($flavors): ?>
-      <div style="font-size:12px;color:var(--muted);">Rasa: <?= nl2br(htmlspecialchars($flavors)) ?></div>
-    <?php endif; ?>
-    <?php if ($hasSpicy): ?>
-      <div style="font-size:12px;color:#dc2626;">Opsional pedas</div>
-    <?php endif; ?>
-    <p>Harga Rp <?= number_format($item['harga'], 0, ',', '.') ?></p>
-    <button onclick="tambahKeranjang(this, '<?= htmlspecialchars($item['nama']) ?>', <?= $item['harga'] ?>, <?= $kantin_id ?>)">Pesan</button>
   </div>
-  <?php endwhile; ?>
+</nav>
+
+<div class="container my-4">
+  <!-- Filter Buttons -->
+  <div class="filter-buttons">
+    <button class="filter-btn active" onclick="filterMenu('semua')">Semua</button>
+    <button class="filter-btn" onclick="filterMenu('makanan')">Makanan</button>
+    <button class="filter-btn" onclick="filterMenu('minuman')">Minuman</button>
+    <button class="filter-btn" onclick="filterMenu('snack')">Snack</button>
+  </div>
+
+  <!-- Menu Header -->
+  <div class="menu-header">
+    <div>
+      <h3 class="mb-0">
+        <i class="fas fa-utensils me-2"></i>Menu <?= htmlspecialchars($kantin['nama']) ?>
+      </h3>
+      <small class="text-muted">Pilih menu favorit Anda</small>
+    </div>
+    <button class="cart-button" onclick="location.href='keranjang.php'">
+      <i class="fas fa-shopping-cart me-2"></i>Lihat Keranjang
+      <span class="badge bg-light text-dark ms-2">
+        <?php echo isset($_SESSION['keranjang']) ? count($_SESSION['keranjang']) : 0; ?>
+      </span>
+    </button>
+  </div>
+
+  <!-- Menu Grid -->
+  <div class="menu-grid">
+    <?php while ($item = $menu_items->fetch_assoc()):
+          $hasSpicy = $item['spicy'] ? '1' : '0';
+          $maxLevel = (int)$item['spicy_levels'];
+      ?>
+      <div class="menu-card" data-kategori="<?= htmlspecialchars($item['kategori']) ?>"
+           data-spicy="<?= $hasSpicy ?>" data-levels="<?= $maxLevel ?>">
+        <img src="<?= htmlspecialchars($item['gambar']) ?>" alt="<?= htmlspecialchars($item['nama']) ?>">
+        <h3><?= htmlspecialchars($item['nama']) ?></h3>
+        <?php if ($hasSpicy): ?>
+          <div class="spicy-badge">
+            <i class="fas fa-pepper-hot me-1"></i>Opsional Pedas
+          </div>
+        <?php endif; ?>
+        <p>Rp <?= number_format($item['harga'], 0, ',', '.') ?></p>
+        <button onclick="tambahKeranjang(this, '<?= htmlspecialchars($item['nama']) ?>', <?= $item['harga'] ?>, <?= $kantin_id ?>)">
+          <i class="fas fa-plus me-1"></i>Pesan
+        </button>
+      </div>
+    <?php endwhile; ?>
+  </div>
 </div>
 
-<div class="nav">
-  <a href="dashboard.php">Beranda</a>
-  <a href="status_pesanan.php">Status Pesanan</a>
+<!-- Footer Navigation -->
+<div class="footer-nav">
+  <div class="container text-center">
+    <a href="dashboard.php">
+      <i class="fas fa-home me-1"></i>Beranda
+    </a>
+    <a href="status_pesanan.php">
+      <i class="fas fa-list me-1"></i>Status Pesanan
+    </a>
+  </div>
 </div>
+
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 <script>
 function filterMenu(kategori) {
-  const cards = document.querySelectorAll('.card');
-  const buttons = document.querySelectorAll('.filter button');
-  
+  const cards = document.querySelectorAll('.menu-card');
+  const buttons = document.querySelectorAll('.filter-btn');
+
   buttons.forEach(btn => btn.classList.remove('active'));
   event.target.classList.add('active');
-  
+
   cards.forEach(card => {
     if (kategori === 'semua') {
       card.style.display = '';
@@ -118,20 +296,12 @@ function filterMenu(kategori) {
 
 function tambahKeranjang(btn, nama, harga, kantinId) {
   // read options from card
-  const card = btn.closest('.card');
-  const flavors = card.dataset.flavors;
+  const card = btn.closest('.menu-card');
   const hasSpicy = card.dataset.spicy === '1';
   const maxLevel = parseInt(card.dataset.levels) || 0;
 
   let payload = { nama, harga, kantin_id: kantinId };
 
-  if (flavors) {
-    // collect checked boxes
-    const boxes = card.querySelectorAll('.flavor-options input[type=checkbox]:checked');
-    if (boxes.length) {
-      payload.flavor = Array.from(boxes).map(b=>b.value).join(', ');
-    }
-  }
   if (hasSpicy) {
     if (confirm('Mau pedas?')) {
       let lvl = prompt('Level pedas (1-'+maxLevel+'):', '1');

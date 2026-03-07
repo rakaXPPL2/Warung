@@ -1,12 +1,13 @@
+/* legacy stylesheet - kept for reference but largely superseded by base.css */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 body {
-  background: #f2f2f2;
+  background: var(--bg) url('../assets/bg-pattern.svg') repeat;
   padding-bottom: 80px;
 }
 

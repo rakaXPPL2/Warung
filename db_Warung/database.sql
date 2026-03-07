@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS pesanan (
     metode_pembayaran ENUM('cod', 'online') NOT NULL,
     total_harga INT,
     catatan VARCHAR(255) DEFAULT NULL,
+    seller_catatan VARCHAR(255) DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -68,7 +69,6 @@ CREATE TABLE IF NOT EXISTS menu (
     harga INT NOT NULL,
     gambar VARCHAR(255),
     kategori ENUM('makanan', 'minuman', 'snack') NOT NULL,
-    flavor_options TEXT DEFAULT NULL,
     spicy TINYINT(1) DEFAULT 0,
     spicy_levels INT DEFAULT 5,
     FOREIGN KEY (kantin_id) REFERENCES kantin(id)
@@ -78,39 +78,39 @@ CREATE TABLE IF NOT EXISTS menu (
 -- all images use a common placeholder template URL for convenience
 SET @placeholder = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-Wn0wYYlJX1a8whqKxKiqodeNxNrZ6IpSgQ&s';
 
-INSERT INTO menu (kantin_id, nama, harga, gambar, kategori, flavor_options, spicy, spicy_levels) VALUES
+INSERT INTO menu (kantin_id, nama, harga, gambar, kategori, spicy, spicy_levels) VALUES
 -- Kantin 1
-(1, 'Lumpia Basah', 6000, @placeholder, 'makanan', NULL, 0, 5),
-(1, 'Perkedel', 3000, @placeholder, 'makanan', NULL, 0, 5),
-(1, 'Tahu Goreng', 2500, @placeholder, 'makanan', NULL, 1, 5),
-(1, 'Teh Manis', 2000, @placeholder, 'minuman', 'manis,asen', 0, 5),
-(1, 'Es Campur', 5000, @placeholder, 'minuman', 'coklat,vanila', 0, 5),
-(1, 'Roti Bakar', 4000, @placeholder, 'snack', NULL, 0, 5),
-(1, 'Sate Ayam', 8000, @placeholder, 'makanan', NULL, 1, 5),
-(1, 'Nasi Uduk', 7000, @placeholder, 'makanan', NULL, 0, 5),
-(1, 'Jus Alpukat', 6000, @placeholder, 'minuman', 'manis', 0, 5),
+(1, 'Lumpia Basah', 6000, @placeholder, 'makanan', 0, 5),
+(1, 'Perkedel', 3000, @placeholder, 'makanan', 0, 5),
+(1, 'Tahu Goreng', 2500, @placeholder, 'makanan', 1, 5),
+(1, 'Teh Manis', 2000, @placeholder, 'minuman', 0, 5),
+(1, 'Es Campur', 5000, @placeholder, 'minuman', 0, 5),
+(1, 'Roti Bakar', 4000, @placeholder, 'snack', 0, 5),
+(1, 'Sate Ayam', 8000, @placeholder, 'makanan', 1, 5),
+(1, 'Nasi Uduk', 7000, @placeholder, 'makanan', 0, 5),
+(1, 'Jus Alpukat', 6000, @placeholder, 'minuman', 0, 5),
 -- Kantin 2
-(2, 'Nasi Goreng', 12000, @placeholder, 'makanan', NULL, 1, 5),
-(2, 'Mie Goreng', 10000, @placeholder, 'makanan', NULL, 0, 5),
-(2, 'Soto Ayam', 12000, @placeholder, 'makanan', NULL, 0, 5),
-(2, 'Cibay', 1000, @placeholder, 'minuman', 'cola,orange', 0, 5),
-(2, 'Milkshake', 6000, @placeholder, 'minuman', 'vanila,stroberi', 0, 5),
-(2, 'Pisang Goreng', 3000, @placeholder, 'snack', NULL, 0, 5),
-(2, 'Burger Keju', 11000, @placeholder, 'makanan', NULL, 0, 5),
-(2, 'Es Teh', 2000, @placeholder, 'minuman', 'manis', 0, 5),
-(2, 'Kentang Goreng', 5000, @placeholder, 'snack', NULL, 0, 5),
+(2, 'Nasi Goreng', 12000, @placeholder, 'makanan', 1, 5),
+(2, 'Mie Goreng', 10000, @placeholder, 'makanan', 0, 5),
+(2, 'Soto Ayam', 12000, @placeholder, 'makanan', 0, 5),
+(2, 'Cibay', 1000, @placeholder, 'minuman', 0, 5),
+(2, 'Milkshake', 6000, @placeholder, 'minuman', 0, 5),
+(2, 'Pisang Goreng', 3000, @placeholder, 'snack', 0, 5),
+(2, 'Burger Keju', 11000, @placeholder, 'makanan', 0, 5),
+(2, 'Es Teh', 2000, @placeholder, 'minuman', 0, 5),
+(2, 'Kentang Goreng', 5000, @placeholder, 'snack', 0, 5),
 -- Kantin 3
-(3, 'Bakso Ayam', 8000, @placeholder, 'makanan', NULL, 0, 5),
-(3, 'Gado-gado', 5000, @placeholder, 'makanan', NULL, 0, 5),
-(3, 'Kare Ayam', 11000, @placeholder, 'makanan', NULL, 1, 5),
-(3, 'Jus Jeruk', 4000, @placeholder, 'minuman', 'asgari,manis', 0, 5),
-(3, 'Pempek', 7000, @placeholder, 'snack', NULL, 0, 5),
-(3, 'Nasi Padang', 13000, @placeholder, 'makanan', NULL, 0, 5),
-(3, 'Teh Tarik', 3000, @placeholder, 'minuman', 'manis', 0, 5),
+(3, 'Bakso Ayam', 8000, @placeholder, 'makanan', 0, 5),
+(3, 'Gado-gado', 5000, @placeholder, 'makanan', 0, 5),
+(3, 'Kare Ayam', 11000, @placeholder, 'makanan', 1, 5),
+(3, 'Jus Jeruk', 4000, @placeholder, 'minuman', 0, 5),
+(3, 'Pempek', 7000, @placeholder, 'snack', 0, 5),
+(3, 'Nasi Padang', 13000, @placeholder, 'makanan', 0, 5),
+(3, 'Teh Tarik', 3000, @placeholder, 'minuman', 0, 5),
 -- Kantin 4
-(4, 'Rendang Daging', 15000, @placeholder, 'makanan', NULL, 1, 5),
-(4, 'Spaghetti', 13000, @placeholder, 'makanan', NULL, 0, 5),
-(4, 'Burger', 10000, @placeholder, 'makanan', NULL, 0, 5),
-(4, 'Pizza', 20000, @placeholder, 'makanan', NULL, 0, 5),
-(4, 'Ice Cream', 5000, @placeholder, 'snack', NULL, 0, 5);
+(4, 'Rendang Daging', 15000, @placeholder, 'makanan', 1, 5),
+(4, 'Spaghetti', 13000, @placeholder, 'makanan', 0, 5),
+(4, 'Burger', 10000, @placeholder, 'makanan', 0, 5),
+(4, 'Pizza', 20000, @placeholder, 'makanan', 0, 5),
+(4, 'Ice Cream', 5000, @placeholder, 'snack', 0, 5);
 

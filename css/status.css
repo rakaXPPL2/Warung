@@ -12,11 +12,11 @@
 
 .pesanan-card {
   background: var(--card);
-  border: 1px solid #f3f4f6;
+  border: none;
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px var(--shadow);
 }
 
 .pesanan-header {
@@ -43,22 +43,22 @@
 }
 
 .status-pending {
-  background: #fef3c7;
+  background: #fff4e6;
   color: #92400e;
 }
 
 .status-proses {
-  background: #dbeafe;
+  background: #e0f7fa;
   color: #1e40af;
 }
 
 .status-selesai {
-  background: #dcfce7;
+  background: #e6ffed;
   color: #166534;
 }
 
 .status-diambil {
-  background: #f3e8ff;
+  background: #f9e8ff;
   color: #581c87;
 }
 

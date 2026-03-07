@@ -1,31 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
 :root{
-  --bg: #f6f8fa;
+  --bg: #fff8f0; /* warm cream */
   --card: #ffffff;
   --muted: #6b7280;
-  --primary: #0f766e; /* theme primary */
-  --accent: #fb923c;
-  --shadow: rgba(2,6,23,0.08);
+  --primary: #e07a5f; /* coral */
+  --accent: #f4a261; /* soft orange */
+  --shadow: rgba(0,0,0,0.1);
 }
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
 }
 body{
-  background:var(--bg);
+  background: var(--bg) url('../assets/bg-pattern.svg') repeat;
+  background-size:200px;
   padding-bottom:88px;
   color:#0f172a;
 }
 .header{
-  background:var(--card);
-  padding:16px 18px;
-  font-size:20px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+  background: var(--primary) url('../assets/banner.svg') no-repeat center center;
+  background-size: cover;
+  padding:40px 18px 50px;
+  font-size:24px;
+  color:#fff;
+  position:relative;
   box-shadow: 0 4px 18px var(--shadow);
 }
+.header::before {
+  content: '';
+  background: url('../assets/student.svg') no-repeat center center;
+  width: 48px;
+  height: 48px;
+  position: absolute;
+  top: 10px;
+  left: 18px;
+}
+.header h1{font-size:28px; margin:0;}
+.header h1::after{content:'Hangat, Lezat, untuk Sekolah';display:block;font-size:14px;font-weight:400;color:#fff;opacity:0.85;margin-top:4px;}
+.header .header-actions{position:absolute; top:10px; right:18px;}
 .header .header-actions{display:flex;gap:12px;align-items:center}
 .header .user{color:var(--muted);font-size:14px}
 .header .logout{background:transparent;border:1px solid var(--primary);color:var(--primary);padding:8px 10px;border-radius:8px;text-decoration:none;font-weight:600}
@@ -38,21 +53,58 @@ body{
   background:var(--card);
   display:flex;
   justify-content:space-around;
-  padding:10px 0;
+  padding:12px 0;
   border-top:1px solid #e6e6e6;
-  box-shadow: 0 -6px 18px rgba(2,6,23,0.03);
+  box-shadow: 0 -6px 18px rgba(0,0,0,0.05);
 }
-.nav a{ text-decoration:none;color:#9ca3af;/* lighter grey */font-weight:600 }
+.nav a{ text-decoration:none;color:#9ca3af;/* lighter grey */font-weight:600;}
 .nav .active{ color:var(--primary) }
 .nav a:hover{color:var(--primary)}
 .primary-btn{ width:calc(100% - 24px); margin:12px; padding:14px; background:var(--primary); color:white; border:none; border-radius:10px; font-weight:700 }
 
 /* general table style for better look */
-table{width:100%;border-collapse:collapse;margin:12px 0}
+table{width:100%;border-collapse:collapse;margin:12px 0; background:var(--card); border-radius:8px; overflow:hidden;}
 th, td{padding:8px;border:1px solid #e2e8f0;text-align:left}
 
 /* button utility */
 .btn{padding:8px 14px;border:none;border-radius:6px;cursor:pointer;font-weight:600}
 .btn-primary{background:var(--primary);color:#fff}
 .btn-secondary{background:#f1f5f9;color:var(--muted)}
+
+/* note textarea styling used across pages */
+.note-field textarea, .note-field {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  resize: vertical;
+  margin-bottom: 12px;
+}
+
+/* card enhancements for menus/items */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--shadow);
+  padding: 12px;
+  position: relative;
+  transition: transform 0.2s;
+}
+.card:hover{transform: translateY(-2px);}
+.card::after {
+  content: '';
+  background: url('../assets/snack1.svg') no-repeat center center;
+  width: 40px; height: 40px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  opacity: 0.6;
+}
+
+/* utility button shadows */
+.btn{padding:8px 14px;border:none;border-radius:6px;cursor:pointer;font-weight:600;box-shadow:0 2px 6px var(--shadow);transition:background 0.2s, transform 0.1s;}
+.btn:active{transform:scale(0.98);}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-secondary{background:var(--accent);color:#fff}
 

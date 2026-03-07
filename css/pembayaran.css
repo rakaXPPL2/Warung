@@ -5,11 +5,12 @@
 }
 
 .ringkasan {
-  background: #f8fafc;
+  background: var(--card);
   padding: 24px;
   border-radius: 12px;
   margin-bottom: 30px;
   border: 1px solid #e2e8f0;
+  box-shadow:0 2px 6px var(--shadow);
 }
 
 .ringkasan h3 {
@@ -65,8 +66,8 @@
 }
 
 .metode-option:hover {
-  border-color: var(--primary);
-  background: #f0fffe;
+  border-color: var(--accent);
+  background: #fff9f4;
 }
 
 .metode-option input[type="radio"] {
@@ -109,7 +110,7 @@
 }
 
 .btn-bayar:hover {
-  background: #0d7b72;
+  background: #c15f4a;
 }
 
 .btn-kembali {

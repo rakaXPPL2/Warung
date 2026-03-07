@@ -8,12 +8,12 @@
 }
 
 .success-box {
-  background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   color: white;
   padding: 40px;
   border-radius: 15px;
   margin-bottom: 30px;
-  box-shadow: 0 10px 30px rgba(15, 118, 110, 0.2);
+  box-shadow: 0 10px 30px var(--shadow);
 }
 
 .check-icon {
@@ -142,7 +142,7 @@
 }
 
 .btn-main:hover {
-  background: #0d7b72;
+  background: #c15f4a;
 }
 
 .btn-secondary {

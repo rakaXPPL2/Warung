@@ -68,7 +68,7 @@
 
 .item-controls button {
   padding: 6px 12px;
-  background: #ef4444;
+  background: var(--accent);
   color: white;
   border: none;
   border-radius: 6px;
@@ -121,10 +121,11 @@
   cursor: pointer;
   font-weight: bold;
   font-size: 16px;
+  box-shadow:0 3px 8px var(--shadow);
 }
 
 .btn-checkout:hover {
-  background: #0d7b72;
+  background: #c15f4a;
 }
 
 .btn-cancel {

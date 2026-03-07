@@ -1,10 +1,93 @@
 .filter{display:flex;gap:10px;padding:12px}
-.filter button{padding:8px 14px;border-radius:20px;border:none;background:#f1f5f9;color:var(--muted);font-weight:600}
-.filter .active{background:linear-gradient(90deg, rgba(15,118,110,0.12), rgba(251,146,60,0.03));color:var(--primary)}
-.menu{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:16px}
+.filter button{padding:8px 14px;border-radius:20px;border:none;background:var(--card);color:var(--muted);font-weight:600;box-shadow:0 2px 4px var(--shadow);transition:background 0.2s;}
+.filter button:hover{background:var(--accent);color:#fff}
+.filter .active{background:var(--primary);color:#fff}
+.menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;padding:16px}
 .card{background:var(--card);border-radius:14px;padding:14px;text-align:center;box-shadow:0 8px 18px rgba(2,6,23,0.04);border:1px solid #f3f4f6}
 .card img{width:100%;height:140px;object-fit:cover;border-radius:8px}
 .card h3{margin-top:12px;margin-bottom:6px;color:#071332}
+.card:nth-child(even)::after {background-image: url('../assets/snack2.svg');}
 .card p{color:var(--muted);font-size:14px;margin-bottom:12px}
 .card button{margin-top:8px;width:100%;padding:10px;background:var(--primary);color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:700}
+
+.recent-orders {
+  background: var(--card);
+  margin: 16px;
+  padding: 16px;
+  border-radius: 14px;
+  box-shadow: 0 8px 18px rgba(2,6,23,0.04);
+  border: 1px solid #f3f4f6;
+}
+
+.recent-orders h3 {
+  margin: 0 0 12px 0;
+  color: #071332;
+  font-size: 18px;
+}
+
+.order-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-pending { background: #fef3c7; color: #d97706; }
+.status-proses { background: #dbeafe; color: #2563eb; }
+.status-selesai { background: #d1fae5; color: #065f46; }
+.status-diambil { background: #e0e7ff; color: #3730a3; }
+
+.badge-status {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.badge-menunggu {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.badge-proses {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.badge-selesai {
+  background: #d4edda;
+  color: #155724;
+}
+
+.order-detail {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.view-all {
+  display: block;
+  text-align: center;
+  margin-top: 12px;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+}
 
