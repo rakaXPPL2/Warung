@@ -314,7 +314,7 @@ $username = $_SESSION['username'];
 
         <div class="detail-row">
           <span><strong>Metode:</strong></span>
-          <span><?= $p['metode_pembayaran'] === 'cod' ? '💵 Bayar di Tempat' : '🏧 Transfer' ?></span>
+          <span>💵 Bayar di Tempat (COD)</span>
         </div>
         <div class="detail-row">
           <span><strong>Waktu:</strong></span>

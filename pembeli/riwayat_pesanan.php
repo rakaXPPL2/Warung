@@ -86,9 +86,10 @@ $username = $_SESSION['username'];
             <span class="value"><?= htmlspecialchars($pesanan['seller_catatan']) ?></span>
           </div>
           <?php endif; ?>
+
           <div class="detail-row">
             <span class="label">Metode Pembayaran:</span>
-            <span class="value"><?= $pesanan['metode_pembayaran'] === 'cod' ? '💵 Bayar di Tempat' : '🏧 Transfer' ?></span>
+            <span class="value">💵 Bayar di Tempat (COD)</span>
           </div>
           <div class="detail-row">
             <span class="label">Waktu Pesanan:</span>

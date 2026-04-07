@@ -44,17 +44,18 @@ foreach ($_SESSION['keranjang'] as &$item) {
         break;
     }
 }
+unset($item); // PENTING: Unset reference untuk menghindari overwrite
 
 // Jika belum ada, tambah item baru
 if (!$found) {
-    $item = [
+    $new_item = [
         'nama' => $nama,
         'harga' => $harga,
         'kantin_id' => $kantin_id,
         'jumlah' => 1
     ];
-    if ($spicy_level !== null) $item['spicy_level'] = $spicy_level;
-    $_SESSION['keranjang'][] = $item;
+    if ($spicy_level !== null) $new_item['spicy_level'] = $spicy_level;
+    $_SESSION['keranjang'][] = $new_item;
 }
 
 http_response_code(200);

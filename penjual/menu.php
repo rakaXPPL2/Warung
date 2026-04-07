@@ -22,6 +22,11 @@ if ($checkSpicy && $checkSpicy->num_rows === 0) {
 if ($conn->query("SHOW COLUMNS FROM menu LIKE 'flavor_options'")->num_rows) {
     $conn->query("ALTER TABLE menu DROP COLUMN flavor_options");
 }
+// add menu_order column for sequential numbering per kantin
+$checkOrder = $conn->query("SHOW COLUMNS FROM menu LIKE 'menu_order'");
+if ($checkOrder && $checkOrder->num_rows === 0) {
+    $conn->query("ALTER TABLE menu ADD COLUMN menu_order INT DEFAULT 0");
+}
 
 // handle add / delete actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -34,8 +39,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $levels = (int)($_POST['spicy_levels'] ?? 5);
 
         if ($nama !== '' && $harga > 0 && in_array($kategori, ['makanan','minuman','snack'])) {
-            $stmt = $conn->prepare("INSERT INTO menu (kantin_id, nama, harga, gambar, kategori, spicy, spicy_levels) VALUES (?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("isissii", $kantin_id, $nama, $harga, $gambar, $kategori, $spicy, $levels);
+            // get next menu_order for this kantin
+            $nextStmt = $conn->prepare("SELECT MAX(menu_order) as max_order FROM menu WHERE kantin_id = ?");
+            $nextStmt->bind_param("i", $kantin_id);
+            $nextStmt->execute();
+            $nextResult = $nextStmt->get_result()->fetch_assoc();
+            $nextOrder = ($nextResult['max_order'] ?? 0) + 1;
+            
+            $stmt = $conn->prepare("INSERT INTO menu (kantin_id, nama, harga, gambar, kategori, spicy, spicy_levels, menu_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("isissiii", $kantin_id, $nama, $harga, $gambar, $kategori, $spicy, $levels, $nextOrder);
             $stmt->execute();
         }
     } elseif (isset($_POST['delete'])) {
@@ -43,11 +55,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $conn->prepare("DELETE FROM menu WHERE id = ? AND kantin_id = ?");
         $stmt->bind_param("ii", $id, $kantin_id);
         $stmt->execute();
+        
+        // Reorder menu_order untuk kantin ini agar tidak ada gap
+        $reorderStmt = $conn->prepare("SELECT id FROM menu WHERE kantin_id = ? ORDER BY menu_order ASC");
+        $reorderStmt->bind_param("i", $kantin_id);
+        $reorderStmt->execute();
+        $reorderResult = $reorderStmt->get_result();
+        $newOrder = 1;
+        while ($row = $reorderResult->fetch_assoc()) {
+            $updateStmt = $conn->prepare("UPDATE menu SET menu_order = ? WHERE id = ?");
+            $updateStmt->bind_param("ii", $newOrder, $row['id']);
+            $updateStmt->execute();
+            $newOrder++;
+        }
     }
 }
 
 // fetch current menu
-$stmt = $conn->prepare("SELECT * FROM menu WHERE kantin_id = ? ORDER BY id DESC");
+$stmt = $conn->prepare("SELECT * FROM menu WHERE kantin_id = ? ORDER BY menu_order ASC");
 $stmt->bind_param("i", $kantin_id);
 $stmt->execute();
 $menus = $stmt->get_result();
@@ -61,11 +86,13 @@ if ($menus->num_rows === 0) {
         ['nama'=>'Sample Teh', 'harga'=>3000, 'kategori'=>'minuman'],
         ['nama'=>'Sample Snack', 'harga'=>5000, 'kategori'=>'snack'],
     ];
+    $menuOrder = 1;
     foreach ($samples as $s) {
-        $stmt2 = $conn->prepare("INSERT INTO menu (kantin_id,nama,harga,gambar,kategori,spicy,spicy_levels) VALUES (?,?,?,?,?,0,5)");
-        $g = $defaultImage;
-        $stmt2->bind_param("isiss", $kantin_id, $s['nama'], $s['harga'], $g, $s['kategori']);
+        $stmt2 = $conn->prepare("INSERT INTO menu (kantin_id,nama,harga,gambar,kategori,spicy,spicy_levels,menu_order) VALUES (?,?,?,?,?,0,5,?)");
+        $g = '';
+        $stmt2->bind_param("isissi", $kantin_id, $s['nama'], $s['harga'], $g, $s['kategori'], $menuOrder);
         $stmt2->execute();
+        $menuOrder++;
     }
     // re-fetch after seeding
     $stmt->execute();
@@ -269,7 +296,7 @@ if ($menus->num_rows === 0) {
           <tbody>
             <?php while ($row = $menus->fetch_assoc()): ?>
               <tr>
-                <td><?= $row['id'] ?></td>
+                <td><?= $row['menu_order'] ?></td>
                 <td><?= htmlspecialchars($row['nama']) ?></td>
                 <td>Rp <?= number_format($row['harga'], 0, ',', '.') ?></td>
                 <td><span class="badge bg-secondary"><?= htmlspecialchars($row['kategori']) ?></span></td>

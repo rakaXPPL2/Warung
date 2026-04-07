@@ -264,9 +264,7 @@ $username = $_SESSION['username'];
   <div class="info-card">
     <div class="info-item">
       <span class="info-label">Metode Pembayaran</span>
-      <span class="info-value">
-        <?= $metode === 'cod' ? '💵 Bayar di Tempat (COD)' : '🏧 Transfer Bank / E-Wallet' ?>
-      </span>
+      <span class="info-value">💵 Bayar di Tempat (COD)</span>
     </div>
     <div class="info-item">
       <span class="info-label">Status Pesanan</span>
@@ -286,9 +284,7 @@ $username = $_SESSION['username'];
       <li>Cek status pesanan di menu "Status Pesanan"</li>
       <li>Ketika pesanan selesai, kasir akan memberitahu Anda</li>
       <li>Tunjukkan nomor antrian ke kasir untuk mengambil pesanan</li>
-      <?php if ($metode === 'cod'): ?>
-        <li><strong>Ingat untuk membawa uang tunai untuk membayar</strong></li>
-      <?php endif; ?>
+      <li><strong>Ingat untuk membawa uang tunai untuk membayar</strong></li>
     </ul>
   </div>
 

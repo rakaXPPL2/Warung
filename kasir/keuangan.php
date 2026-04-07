@@ -8,7 +8,7 @@ if (!isset($_SESSION['username']) || ($_SESSION['role'] ?? '') !== 'kasir') {
 include '../db_Warung/db_akun.php';
 
 // compute total revenue per kantin and amount due
-$stmt = $conn->prepare("SELECT kantin_id, SUM(total_harga) AS pendapatan, SUM(CASE WHEN metode_pembayaran='cod' AND status IN ('selesai','diambil') THEN total_harga ELSE 0 END) AS cod_collected FROM pesanan GROUP BY kantin_id");
+$stmt = $conn->prepare("SELECT kantin_id, SUM(total_harga) AS pendapatan FROM pesanan GROUP BY kantin_id");
 $stmt->execute();
 $reports = $stmt->get_result();
 $username = $_SESSION['username'];
@@ -37,13 +37,12 @@ $username = $_SESSION['username'];
 
 <div class="container">
   <table>
-    <thead><tr><th>Kantin ID</th><th>Total Pendapatan</th><th>COD Terbayar</th></tr></thead>
+    <thead><tr><th>Kantin ID</th><th>Total Pendapatan</th></tr></thead>
     <tbody>
       <?php while($r = $reports->fetch_assoc()): ?>
       <tr>
         <td><?= $r['kantin_id'] ?></td>
         <td>Rp <?= number_format($r['pendapatan'],0,',','.') ?></td>
-        <td>Rp <?= number_format($r['cod_collected'],0,',','.') ?></td>
       </tr>
       <?php endwhile; ?>
     </tbody>

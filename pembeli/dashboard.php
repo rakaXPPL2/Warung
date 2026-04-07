@@ -19,8 +19,13 @@ $result_pembeli = $stmt->get_result();
 $pembeli = $result_pembeli->fetch_assoc();
 $pembeli_id = $pembeli['id'] ?? 0;
 
-// Get pesanan dalam 24 jam terakhir
-$stmt_recent = $conn->prepare("SELECT * FROM pesanan WHERE pembeli_id = ? AND created_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR) ORDER BY created_at DESC");
+// Delete pesanan yang lebih tua dari 24 jam
+$prune_stmt = $conn->prepare("DELETE FROM pesanan WHERE pembeli_id = ? AND created_at < DATE_SUB(NOW(), INTERVAL 24 HOUR)");
+$prune_stmt->bind_param("i", $pembeli_id);
+$prune_stmt->execute();
+
+// Get semua pesanan pembeli (tanpa filter 24 jam, karena sudah dihapus above)
+$stmt_recent = $conn->prepare("SELECT * FROM pesanan WHERE pembeli_id = ? ORDER BY created_at DESC");
 $stmt_recent->bind_param("i", $pembeli_id);
 $stmt_recent->execute();
 $recent_orders = $stmt_recent->get_result();
@@ -215,43 +220,77 @@ $recent_orders = $stmt_recent->get_result();
   <?php if ($recent_orders->num_rows > 0): ?>
     <div class="mb-5">
       <h3 class="mb-4">
-        <i class="fas fa-clock me-2"></i>Pesanan Terbaru (24 Jam)
+        <i class="fas fa-receipt me-2"></i>Pesanan Saya (<?= $recent_orders->num_rows ?> Pesanan)
       </h3>
-      <div class="row">
-        <?php while ($order = $recent_orders->fetch_assoc()): ?>
-          <div class="col-lg-6 col-md-12 mb-4">
-            <div class="order-card">
-              <div class="order-header">
-                <div class="order-number">#<?= htmlspecialchars($order['nomor_antrian']) ?></div>
-                <div class="order-status">
-                  <span class="status-badge status-<?= $order['status'] ?>">
-                    <?php
-                    $status_text = [
-                      'pending' => '⏳ Menunggu',
-                      'proses' => '👨‍🍳 Diproses',
-                      'selesai' => '✅ Siap Diambil',
-                      'diambil' => '🎉 Selesai'
-                    ];
-                    echo $status_text[$order['status']];
-                    ?>
-                  </span>
-                </div>
+      <div style="background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden;">
+        <?php 
+        $order_number = 1;
+        while ($order = $recent_orders->fetch_assoc()): 
+          // Get kantin info
+          $kantin_stmt = $conn->prepare("SELECT nama FROM kantin WHERE id = ?");
+          $kantin_stmt->bind_param("i", $order['kantin_id']);
+          $kantin_stmt->execute();
+          $kantin_info = $kantin_stmt->get_result()->fetch_assoc();
+          $kantin_nama = $kantin_info['nama'] ?? 'Kantin ' . $order['kantin_id'];
+          
+          // Get menu items
+          $detail_stmt = $conn->prepare("SELECT nama_menu, jumlah FROM pesanan_detail WHERE pesanan_id = ?");
+          $detail_stmt->bind_param("i", $order['id']);
+          $detail_stmt->execute();
+          $details = $detail_stmt->get_result();
+        ?>
+          <div style="border-bottom: 1px solid #f0f0f0; padding: 20px; <?php echo $order_number !== 1 ? '' : ''; ?>">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+              <div>
+                <h4 style="margin: 0; color: #28a745; font-weight: 700;">Pesanan <?= $order_number ?> - #<?= htmlspecialchars($order['nomor_antrian']) ?></h4>
+                <small style="color: #6c757d;">Kantin: <strong><?= htmlspecialchars($kantin_nama) ?></strong></small>
               </div>
-              <div class="order-body">
-                <div class="order-details">
-                  <div class="detail-item">
-                    <div class="detail-label">Waktu</div>
-                    <div class="detail-value"><?= date('d/m/Y H:i', strtotime($order['created_at'])) ?></div>
-                  </div>
-                  <div class="detail-item">
-                    <div class="detail-label">Total</div>
-                    <div class="detail-value" style="color: #28a745; font-weight: 600;">Rp <?= number_format($order['total_harga'], 0, ',', '.') ?></div>
-                  </div>
-                </div>
-              </div>
+              <span class="badge" style="background: <?php 
+                switch($order['status']) {
+                  case 'pending': echo '#ffc107'; break;
+                  case 'proses': echo '#28a745'; break;
+                  case 'selesai': echo '#17a2b8'; break;
+                  case 'diambil': echo '#6c757d'; break;
+                }
+              ?>; color: white; padding: 8px 12px; border-radius: 20px; font-weight: 600;">
+                <?php
+                $status_text = [
+                  'pending' => '⏳ Menunggu',
+                  'proses' => '👨‍🍳 Diproses',
+                  'selesai' => '✅ Siap Ambil',
+                  'diambil' => '🎉 Selesai'
+                ];
+                echo $status_text[$order['status']] ?? $order['status'];
+                ?>
+              </span>
+            </div>
+            
+            <div style="margin: 10px 0;">
+              <strong>Menu yang Dipesan:</strong>
+              <ul style="margin: 5px 0 0 20px; padding: 0;">
+                <?php 
+                if ($details && $details->num_rows > 0):
+                  while ($detail = $details->fetch_assoc()):
+                ?>
+                  <li><?= htmlspecialchars($detail['nama_menu']) ?> (x<?= $detail['jumlah'] ?>)</li>
+                <?php 
+                  endwhile;
+                else:
+                ?>
+                  <li>-</li>
+                <?php endif; ?>
+              </ul>
+            </div>
+            
+            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #f0f0f0; display: flex; justify-content: space-between; font-size: 14px;">
+              <span><strong style="color: #28a745;">Total:</strong> Rp <?= number_format($order['total_harga'], 0, ',', '.') ?></span>
+              <span style="color: #6c757d;">Waktu: <?= date('d/m/Y H:i', strtotime($order['created_at'])) ?></span>
             </div>
           </div>
-        <?php endwhile; ?>
+        <?php 
+        $order_number++;
+        endwhile; 
+        ?>
       </div>
     </div>
   <?php endif; ?>

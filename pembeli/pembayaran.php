@@ -32,9 +32,6 @@ foreach ($keranjang as $item) {
     $total += $item['harga'] * $item['jumlah'];
 }
 
-// Generate nomor antrian
-$nomor_antrian = strtoupper(substr(uniqid(), -6));
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['metode_pembayaran'])) {
     $metode = $_POST['metode_pembayaran'];
     $catatan = trim($_POST['catatan'] ?? '');
@@ -46,6 +43,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['metode_pembayaran']))
     $result = $stmt->get_result();
     $pembeli = $result->fetch_assoc();
     $pembeli_id = $pembeli['id'] ?? 1;
+    
+    // Generate nomor antrian berdasarkan urutan per kantin (COUNT + 1)
+    $antrian_stmt = $conn->prepare("SELECT COUNT(*) + 1 as next_no FROM pesanan WHERE kantin_id = ?");
+    $antrian_stmt->bind_param("i", $kantin_id);
+    $antrian_stmt->execute();
+    $antrian_result = $antrian_stmt->get_result()->fetch_assoc();
+    $nomor_antrian = (string)$antrian_result['next_no'];
     
     // Insert pesanan
     $stmt = $conn->prepare("INSERT INTO pesanan (pembeli_id, pembeli_nama, kantin_id, nomor_antrian, metode_pembayaran, total_harga, catatan, status) 
@@ -293,7 +297,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['metode_pembayaran']))
     <div class="col-lg-6 mb-4">
       <div class="payment-card">
         <h3>
-          <i class="fas fa-money-bill-wave me-2"></i>Pilih Metode Pembayaran
+          <i class="fas fa-money-bill-wave me-2"></i>Konfirmasi Pesanan
         </h3>
 
         <form method="post">
@@ -302,28 +306,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['metode_pembayaran']))
             <label for="catatan">Catatan untuk penjual (opsional)</label>
           </div>
 
-          <div class="payment-option" onclick="selectPayment('cod')">
-            <input type="radio" name="metode_pembayaran" value="cod" id="cod" required>
-            <div>
-              <div class="payment-title">
-                <i class="fas fa-hand-holding-usd me-2"></i>💵 Bayar di Tempat (COD)
-              </div>
-              <div class="payment-desc">Bayar saat mengambil pesanan di kasir kantin</div>
-            </div>
-          </div>
+          <input type="hidden" name="metode_pembayaran" value="cod">
 
-          <div class="payment-option" onclick="selectPayment('online')">
-            <input type="radio" name="metode_pembayaran" value="online" id="online" required>
-            <div>
-              <div class="payment-title">
-                <i class="fas fa-mobile-alt me-2"></i>🏧 Transfer Bank / E-Wallet
-              </div>
-              <div class="payment-desc">Bayar sekarang untuk konfirmasi pesanan</div>
-            </div>
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i><strong>Metode Pembayaran:</strong> 💵 Bayar di Tempat (COD)
+            <br><small>Bayar saat mengambil pesanan di kasir kantin</small>
           </div>
 
           <button type="submit" class="btn-primary-custom">
-            <i class="fas fa-check me-2"></i>Lanjutkan Pembayaran
+            <i class="fas fa-check me-2"></i>Lanjutkan Pesanan
           </button>
           <button type="button" class="btn-secondary-custom" onclick="location.href='keranjang.php'">
             <i class="fas fa-arrow-left me-2"></i>Kembali ke Keranjang
@@ -350,29 +341,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['metode_pembayaran']))
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Font Awesome -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
-<script>
-function selectPayment(method) {
-  // Remove selected class from all options
-  document.querySelectorAll('.payment-option').forEach(option => {
-    option.classList.remove('selected');
-  });
-
-  // Add selected class to clicked option
-  event.currentTarget.classList.add('selected');
-
-  // Check the radio button
-  document.getElementById(method).checked = true;
-}
-
-// Add click listeners to payment options
-document.querySelectorAll('.payment-option').forEach(option => {
-  option.addEventListener('click', function() {
-    const radio = this.querySelector('input[type="radio"]');
-    selectPayment(radio.value);
-  });
-});
-</script>
 
 </body>
 </html>

@@ -132,12 +132,10 @@ $username = $_SESSION['username'];
     }
     .btn-proses { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; }
     .btn-proses:hover { background: linear-gradient(135deg, #20c997 0%, #28a745 100%); transform: translateY(-2px); }
-    .btn-selesai { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; }
-    .btn-selesai:hover { background: linear-gradient(135deg, #20c997 0%, #28a745 100%); transform: translateY(-2px); }
-    .btn-bayar { background: #ffc107; color: #212529; }
-    .btn-bayar:hover { background: #e0a800; transform: translateY(-2px); }
-    .btn-ambil { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; }
-    .btn-ambil:hover { background: linear-gradient(135deg, #20c997 0%, #28a745 100%); transform: translateY(-2px); }
+    .btn-selesai { background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%); color: white; }
+    .btn-selesai:hover { background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%); transform: translateY(-2px); }
+    .btn-ambil { background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%); color: white; }
+    .btn-ambil:hover { background: linear-gradient(135deg, #5a32a3 0%, #6f42c1 100%); transform: translateY(-2px); }
     .kosong {
       text-align: center;
       padding: 80px 20px;
@@ -236,10 +234,11 @@ $username = $_SESSION['username'];
                       </div>
                       <div class="detail-row">
                         <span><i class="fas fa-credit-card me-1"></i>Metode:</span>
-                        <span class="badge bg-<?= $pesanan['metode_pembayaran'] === 'cod' ? 'warning' : 'success' ?>">
-                          <?= $pesanan['metode_pembayaran'] === 'cod' ? '💵 COD' : '✅ Online' ?>
+                        <span class="badge bg-warning">
+                          💵 Bayar di Tempat
                         </span>
                       </div>
+
                     </div>
                   </div>
 
@@ -247,9 +246,9 @@ $username = $_SESSION['username'];
                     <div class="status-badge status-<?= $pesanan['status'] ?>">
                       <?php
                       $status_text = [
-                        'pending' => '⏳ Menunggu',
-                        'proses' => '👨‍🍳 Diproses',
-                        'selesai' => '✅ Siap Ambil',
+                        'pending' => '⏳ Menunggu Pembayaran',
+                        'proses' => '✅ Sudah Bayar',
+                        'selesai' => '🖨️ Siap Ambil',
                         'diambil' => '🎉 Selesai'
                       ];
                       echo $status_text[$pesanan['status']] ?? $pesanan['status'];
@@ -261,7 +260,7 @@ $username = $_SESSION['username'];
                         <input type="hidden" name="pesanan_id" value="<?= $pesanan['id'] ?>">
                         <input type="hidden" name="status" value="proses">
                         <button type="submit" class="btn btn-proses w-100">
-                          <i class="fas fa-play me-1"></i>Mulai Proses
+                          <i class="fas fa-check me-1"></i>Pesanan Diterima
                         </button>
                       </form>
                     <?php elseif ($pesanan['status'] === 'proses'): ?>
@@ -269,22 +268,17 @@ $username = $_SESSION['username'];
                         <input type="hidden" name="pesanan_id" value="<?= $pesanan['id'] ?>">
                         <input type="hidden" name="status" value="selesai">
                         <button type="submit" class="btn btn-selesai w-100">
-                          <i class="fas fa-check me-1"></i>Tandai Selesai
+                          <i class="fas fa-credit-card me-1"></i>Sudah Bayar
                         </button>
                       </form>
                     <?php elseif ($pesanan['status'] === 'selesai'): ?>
                       <form method="post" style="margin: 0;">
                         <input type="hidden" name="pesanan_id" value="<?= $pesanan['id'] ?>">
                         <input type="hidden" name="status" value="diambil">
-                        <button type="submit" class="btn btn-ambil w-100 mb-2">
-                          <i class="fas fa-hand-holding me-1"></i>Tandai Diambil
+                        <button type="submit" class="btn btn-ambil w-100">
+                          <i class="fas fa-print me-1"></i>Print Struk & Selesai
                         </button>
                       </form>
-                      <?php if ($pesanan['metode_pembayaran'] === 'cod'): ?>
-                        <button class="btn btn-bayar w-100" onclick="handlePayment(<?= $pesanan['total_harga'] ?>)">
-                          <i class="fas fa-money-bill-wave me-1"></i>Bayar COD
-                        </button>
-                      <?php endif; ?>
                     <?php else: ?>
                       <div class="text-center p-3 text-muted">
                         <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
@@ -320,18 +314,5 @@ $username = $_SESSION['username'];
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <script>
-    function handlePayment(total) {
-      let uang = parseInt(prompt('Masukkan jumlah uang diterima (Rp):', '0'));
-      if (isNaN(uang)) return;
-      let kembalian = uang - total;
-      if (kembalian < 0) {
-        alert('Uang kurang! Total yang harus dibayar: Rp ' + total.toLocaleString());
-      } else {
-        alert('Pembayaran berhasil!\nKembalian: Rp ' + kembalian.toLocaleString());
-      }
-    }
-  </script>
 </body>
 </html>
