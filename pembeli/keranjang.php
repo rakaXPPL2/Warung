@@ -164,8 +164,11 @@ foreach ($keranjang as $item) {
       padding: 15px 0;
       position: fixed;
       bottom: 0;
+      left: 0;
+      right: 0;
       width: 100%;
       z-index: 1000;
+      box-shadow: 0 -6px 18px rgba(0,0,0,0.05);
     }
     .footer-nav a {
       text-decoration: none;

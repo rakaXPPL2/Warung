@@ -55,11 +55,11 @@ CREATE TABLE IF NOT EXISTS kantin (
     gambar VARCHAR(255) DEFAULT '../assets/J.webp'
 );
 
-INSERT INTO kantin (id, nama, deskripsi) VALUES 
-(1, 'Kantin Bu Rina', 'Masakan rumahan yang lezat'),
-(2, 'Kantin Pak Budi', 'Spesialis nasi goreng dan mie'),
-(3, 'Kantin 3', 'Aneka jajanan dan minuman'),
-(4, 'Kantin 4', 'Western food dan kopi');
+INSERT INTO kantin (id, nama, deskripsi, gambar) VALUES 
+(1, 'Kantin Bu Rina', 'Masakan rumahan yang lezat', '../assets/kantin1.jpg'),
+(2, 'Kantin Pak Budi', 'Spesialis nasi goreng dan mie', '../assets/kantin2.jpg'),
+(3, 'Kantin 3', 'Aneka jajanan dan minuman', '../assets/kantin3.jpg'),
+(4, 'Kantin 4', 'Western food dan kopi', '../assets/kantin4.jpg');
 
 -- Tabel Menu (Agar menu tidak hardcoded di PHP)
 CREATE TABLE IF NOT EXISTS menu (

@@ -38,6 +38,7 @@ $username = $_SESSION['username'];
     body {
       font-family: 'Poppins', sans-serif;
       background-color: #f8f9fa;
+      padding-bottom: 88px;
     }
     .navbar-custom {
       background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
@@ -127,7 +128,12 @@ $username = $_SESSION['username'];
       background: white;
       border-top: 1px solid #e9ecef;
       padding: 15px 0;
-      margin-top: 50px;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      box-shadow: 0 -6px 18px rgba(0,0,0,0.05);
     }
     .footer-nav a {
       text-decoration: none;
