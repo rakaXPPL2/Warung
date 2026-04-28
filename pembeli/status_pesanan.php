@@ -7,6 +7,32 @@ if (!isset($_SESSION['username']) || ($_SESSION['role'] ?? '') !== 'pembeli') {
 
 include '../db_Warung/db_akun.php';
 
+// Update status to diambil when customer picks up
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pesanan_id'])) {
+    $pesanan_id = (int)$_POST['pesanan_id'];
+    $pembeli_id = $_SESSION['pembeli_id'] ?? 0;
+    
+    // Get pembeli ID if not in session
+    if (!$pembeli_id) {
+        $stmt = $conn->prepare("SELECT id FROM db_akun WHERE username = ? AND role = 'pembeli'");
+        $stmt->bind_param("s", $_SESSION['username']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $pembeli = $result->fetch_assoc();
+        $pembeli_id = $pembeli['id'] ?? 0;
+        $_SESSION['pembeli_id'] = $pembeli_id;
+    }
+    
+    // Update status to diambil
+    $stmt = $conn->prepare("UPDATE pesanan SET status='diambil' WHERE id=? AND pembeli_id=? AND status='selesai'");
+    $stmt->bind_param("ii", $pesanan_id, $pembeli_id);
+    $stmt->execute();
+    
+    // Refresh page
+    header("Location: status_pesanan.php");
+    exit;
+}
+
 // Get pembeli ID
 $stmt = $conn->prepare("SELECT id FROM db_akun WHERE username = ? AND role = 'pembeli'");
 $stmt->bind_param("s", $_SESSION['username']);
@@ -14,6 +40,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 $pembeli = $result->fetch_assoc();
 $pembeli_id = $pembeli['id'] ?? 0;
+$_SESSION['pembeli_id'] = $pembeli_id;
 
 // Get pesanan pembeli
 $stmt = $conn->prepare("SELECT * FROM pesanan WHERE pembeli_id = ? ORDER BY created_at DESC LIMIT 10");
@@ -249,17 +276,20 @@ $username = $_SESSION['username'];
                 <?php endwhile; ?>
               </div>
 
-              <div class="total-harga">Total: Rp <?= number_format($pesanan['total_harga'], 0, ',', '.') ?></div>
+               <div class="total-harga">Total: Rp <?= number_format($pesanan['total_harga'], 0, ',', '.') ?></div>
 
-              <?php if ($pesanan['status'] === 'selesai'): ?>
-                <div class="alert alert-success alert-custom">
-                  <i class="fas fa-check-circle me-2"></i>Pesanan Anda siap! Tunjukkan nomor antrian ke kasir
-                </div>
-              <?php elseif ($pesanan['status'] === 'diambil'): ?>
-                <div class="alert alert-info alert-custom">
-                  <i class="fas fa-star me-2"></i>Pesanan telah diambil, terima kasih!
-                </div>
-              <?php endif; ?>
+               <?php if ($pesanan['status'] === 'selesai'): ?>
+                 <form method="post" style="margin-top: 15px;">
+                   <input type="hidden" name="pesanan_id" value="<?= $pesanan['id'] ?>">
+                   <button type="submit" class="btn btn-success" style="width: 100%; border-radius: 10px;">
+                     <i class="fas fa-shopping-bag me-2"></i>Sudah Diambil
+                   </button>
+                 </form>
+               <?php elseif ($pesanan['status'] === 'diambil'): ?>
+                 <div class="alert alert-info alert-custom">
+                   <i class="fas fa-star me-2"></i>Pesanan telah diambil, terima kasih!
+                 </div>
+               <?php endif; ?>
             </div>
           </div>
         </div>

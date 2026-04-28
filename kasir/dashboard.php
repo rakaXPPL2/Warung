@@ -255,34 +255,17 @@ $username = $_SESSION['username'];
                       ?>
                     </div>
 
-                    <?php if ($pesanan['status'] === 'pending'): ?>
+                     <?php if ($pesanan['status'] === 'pending'): ?>
                       <form method="post" style="margin: 0;">
                         <input type="hidden" name="pesanan_id" value="<?= $pesanan['id'] ?>">
                         <input type="hidden" name="status" value="proses">
                         <button type="submit" class="btn btn-proses w-100">
-                          <i class="fas fa-check me-1"></i>Pesanan Diterima
-                        </button>
-                      </form>
-                    <?php elseif ($pesanan['status'] === 'proses'): ?>
-                      <form method="post" style="margin: 0;">
-                        <input type="hidden" name="pesanan_id" value="<?= $pesanan['id'] ?>">
-                        <input type="hidden" name="status" value="selesai">
-                        <button type="submit" class="btn btn-selesai w-100">
-                          <i class="fas fa-credit-card me-1"></i>Sudah Bayar
-                        </button>
-                      </form>
-                    <?php elseif ($pesanan['status'] === 'selesai'): ?>
-                      <form method="post" style="margin: 0;">
-                        <input type="hidden" name="pesanan_id" value="<?= $pesanan['id'] ?>">
-                        <input type="hidden" name="status" value="diambil">
-                        <button type="submit" class="btn btn-ambil w-100">
-                          <i class="fas fa-print me-1"></i>Print Struk & Selesai
+                          <i class="fas fa-check me-1"></i>Cek Pembayaran
                         </button>
                       </form>
                     <?php else: ?>
-                      <div class="text-center p-3 text-muted">
-                        <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
-                        <br>Sudah Diambil
+                      <div class="text-center p-3">
+                        <span class="text-muted">Tunggu penjual memproses</span>
                       </div>
                     <?php endif; ?>
                   </div>

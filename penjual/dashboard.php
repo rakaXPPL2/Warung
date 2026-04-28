@@ -340,26 +340,12 @@ $username = $_SESSION['username'];
           <?php endwhile; ?>
         </div>
 
-        <div class="mt-3">
-          <?php if ($p['status'] === 'pending'): ?>
-            <form method="post" class="d-inline">
-              <input type="hidden" name="pesanan_id" value="<?= $p['id'] ?>">
-              <input type="hidden" name="status" value="proses">
-              <button class="btn-custom btn-proses">Mulai Proses</button>
-            </form>
-          <?php endif; ?>
+         <div class="mt-3">
           <?php if ($p['status'] === 'proses'): ?>
             <form method="post" class="d-inline">
               <input type="hidden" name="pesanan_id" value="<?= $p['id'] ?>">
               <input type="hidden" name="status" value="selesai">
               <button class="btn-custom btn-selesai">Selesai</button>
-            </form>
-          <?php endif; ?>
-          <?php if ($p['status'] === 'selesai'): ?>
-            <form method="post" class="d-inline">
-              <input type="hidden" name="pesanan_id" value="<?= $p['id'] ?>">
-              <input type="hidden" name="status" value="diambil">
-              <button class="btn-custom btn-ambil">Sudah Diambil</button>
             </form>
           <?php endif; ?>
         </div>
