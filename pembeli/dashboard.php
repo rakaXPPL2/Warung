@@ -45,16 +45,85 @@ $recent_orders = $stmt_recent->get_result();
     body {
       font-family: 'Poppins', sans-serif;
       background-color: #f8f9fa;
-      padding-bottom: 88px;
+      padding-top: 80px;
     }
+    
+    /* Navbar Styling */
     .navbar-custom {
       background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
     }
+    
     .navbar-brand {
+      font-weight: 700;
+      color: white !important;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .logo-svg {
+      width: 45px;
+      height: 45px;
+      background: white;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px;
+    }
+    
+    .navbar-nav .nav-link {
+      color: rgba(255, 255, 255, 0.9) !important;
       font-weight: 600;
+      margin: 0 10px;
+      padding: 8px 16px !important;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+    
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+      background: rgba(255, 255, 255, 0.2);
       color: white !important;
     }
+    
+    .navbar-custom .d-flex {
+      gap: 10px;
+    }
+    
+    .user-info {
+      color: white !important;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .btn-logout {
+      background: rgba(255, 255, 255, 0.2) !important;
+      border: 2px solid white !important;
+      color: white !important;
+      font-weight: 600;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      padding: 8px 16px !important;
+    }
+    
+    .btn-logout:hover {
+      background: white !important;
+      color: #28a745 !important;
+    }
+    
+    /* Order Card Styling */
     .order-card {
       background: white;
       border-radius: 15px;
@@ -119,6 +188,8 @@ $recent_orders = $stmt_recent->get_result();
     .status-proses { background: #d1ecf1; color: #0c5460; }
     .status-selesai { background: #d4edda; color: #155724; }
     .status-diambil { background: #e2e3e5; color: #383d41; }
+    
+    /* Kantin Card Styling */
     .kantin-card {
       background: white;
       border-radius: 15px;
@@ -168,34 +239,42 @@ $recent_orders = $stmt_recent->get_result();
       padding: 50px;
       color: #6c757d;
     }
-    .footer-nav {
-      background: white;
-      border-top: 1px solid #e9ecef;
-      padding: 15px 0;
+    
+    /* Floating Chat Button */
+    .floating-chat {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      box-shadow: 0 -6px 18px rgba(0,0,0,0.05);
-    }
-    .footer-nav a {
-      text-decoration: none;
-      color: #6c757d;
-      font-weight: 500;
-      padding: 10px 20px;
-      border-radius: 25px;
+      bottom: 30px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
       transition: all 0.3s ease;
-      margin: 0 5px;
+      z-index: 999;
+      border: none;
+      padding: 0;
     }
-    .footer-nav a.active {
-      background: #28a745;
-      color: white;
+    
+    .floating-chat:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 35px rgba(40, 167, 69, 0.4);
     }
-    .footer-nav a:hover {
-      background: #28a745;
-      color: white;
-      transform: translateY(-2px);
+    
+    .floating-chat svg {
+      width: 30px;
+      height: 30px;
+      filter: drop-shadow(0 0 2px rgba(0,0,0,0.1));
+    }
+    
+    .container-main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 30px 20px;
     }
   </style>
 </head>
@@ -204,102 +283,66 @@ $recent_orders = $stmt_recent->get_result();
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-custom">
   <div class="container">
-    <a class="navbar-brand" href="#">
-      <i class="fas fa-store me-2"></i>Kantin Sekolah
+    <a class="navbar-brand" href="dashboard.php">
+      <div class="logo-svg">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <!-- Bowl -->
+          <path d="M 20 40 Q 20 60 50 65 Q 80 60 80 40" fill="none" stroke="#28a745" stroke-width="3" stroke-linecap="round"/>
+          <!-- Spoon -->
+          <ellipse cx="35" cy="25" rx="8" ry="12" fill="#28a745"/>
+          <line x1="35" y1="37" x2="35" y2="50" stroke="#28a745" stroke-width="2" stroke-linecap="round"/>
+          <!-- Fork -->
+          <line x1="65" y1="20" x2="65" y2="48" stroke="#28a745" stroke-width="2" stroke-linecap="round"/>
+          <line x1="58" y1="48" x2="72" y2="48" stroke="#28a745" stroke-width="2"/>
+          <circle cx="59" cy="50" r="1.5" fill="#28a745"/>
+          <circle cx="65" cy="50" r="1.5" fill="#28a745"/>
+          <circle cx="71" cy="50" r="1.5" fill="#28a745"/>
+          <!-- Rice bowl element -->
+          <circle cx="50" cy="45" r="12" fill="#FFD700" opacity="0.6"/>
+        </svg>
+      </div>
+      <span>Warung Ku</span>
     </a>
-    <div class="d-flex align-items-center">
-      <span class="text-white me-3">
-        <i class="fas fa-user-circle me-1"></i>Halo, <?= htmlspecialchars($username) ?>
-      </span>
-      <a href="../logout.php" class="btn btn-outline-light btn-sm rounded-pill">
-        <i class="fas fa-sign-out-alt me-1"></i>Logout
-      </a>
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="dashboard.php">
+            <i class="fas fa-home me-1"></i>Beranda
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="riwayat_pesanan.php">
+            <i class="fas fa-history me-1"></i>Riwayat
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="status_pesanan.php">
+            <i class="fas fa-list me-1"></i>Status Pemesanan
+          </a>
+        </li>
+      </ul>
+      
+      <div class="d-flex align-items-center gap-2 ms-3">
+        <span class="user-info">
+          <i class="fas fa-user-circle"></i><?= htmlspecialchars($username) ?>
+        </span>
+        <a href="../logout.php" class="btn btn-logout">
+          <i class="fas fa-sign-out-alt me-1"></i>Logout
+        </a>
+      </div>
     </div>
   </div>
 </nav>
 
-<div class="container my-4">
-  <h2 class="mb-4 text-center">
+<div class="container-main">
+  <h2 class="mb-5 text-center">
     <i class="fas fa-utensils me-2"></i>Daftar Kantin
   </h2>
-
-  <?php if ($recent_orders->num_rows > 0): ?>
-    <div class="mb-5">
-      <h3 class="mb-4">
-        <i class="fas fa-receipt me-2"></i>Pesanan Saya (<?= $recent_orders->num_rows ?> Pesanan)
-      </h3>
-      <div style="background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden;">
-        <?php 
-        $order_number = 1;
-        while ($order = $recent_orders->fetch_assoc()): 
-          // Get kantin info
-          $kantin_stmt = $conn->prepare("SELECT nama FROM kantin WHERE id = ?");
-          $kantin_stmt->bind_param("i", $order['kantin_id']);
-          $kantin_stmt->execute();
-          $kantin_info = $kantin_stmt->get_result()->fetch_assoc();
-          $kantin_nama = $kantin_info['nama'] ?? 'Kantin ' . $order['kantin_id'];
-          
-          // Get menu items
-          $detail_stmt = $conn->prepare("SELECT nama_menu, jumlah FROM pesanan_detail WHERE pesanan_id = ?");
-          $detail_stmt->bind_param("i", $order['id']);
-          $detail_stmt->execute();
-          $details = $detail_stmt->get_result();
-        ?>
-          <div style="border-bottom: 1px solid #f0f0f0; padding: 20px; <?php echo $order_number !== 1 ? '' : ''; ?>">
-            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
-              <div>
-                <h4 style="margin: 0; color: #28a745; font-weight: 700;">Pesanan <?= $order_number ?> - #<?= htmlspecialchars($order['nomor_antrian']) ?></h4>
-                <small style="color: #6c757d;">Kantin: <strong><?= htmlspecialchars($kantin_nama) ?></strong></small>
-              </div>
-              <span class="badge" style="background: <?php 
-                switch($order['status']) {
-                  case 'pending': echo '#ffc107'; break;
-                  case 'proses': echo '#28a745'; break;
-                  case 'selesai': echo '#17a2b8'; break;
-                  case 'diambil': echo '#6c757d'; break;
-                }
-              ?>; color: white; padding: 8px 12px; border-radius: 20px; font-weight: 600;">
-                <?php
-                $status_text = [
-                  'pending' => '⏳ Menunggu',
-                  'proses' => '👨‍🍳 Diproses',
-                  'selesai' => '✅ Siap Ambil',
-                  'diambil' => '🎉 Selesai'
-                ];
-                echo $status_text[$order['status']] ?? $order['status'];
-                ?>
-              </span>
-            </div>
-            
-            <div style="margin: 10px 0;">
-              <strong>Menu yang Dipesan:</strong>
-              <ul style="margin: 5px 0 0 20px; padding: 0;">
-                <?php 
-                if ($details && $details->num_rows > 0):
-                  while ($detail = $details->fetch_assoc()):
-                ?>
-                  <li><?= htmlspecialchars($detail['nama_menu']) ?> (x<?= $detail['jumlah'] ?>)</li>
-                <?php 
-                  endwhile;
-                else:
-                ?>
-                  <li>-</li>
-                <?php endif; ?>
-              </ul>
-            </div>
-            
-            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #f0f0f0; display: flex; justify-content: space-between; font-size: 14px;">
-              <span><strong style="color: #28a745;">Total:</strong> Rp <?= number_format($order['total_harga'], 0, ',', '.') ?></span>
-              <span style="color: #6c757d;">Waktu: <?= date('d/m/Y H:i', strtotime($order['created_at'])) ?></span>
-            </div>
-          </div>
-        <?php 
-        $order_number++;
-        endwhile; 
-        ?>
-      </div>
-    </div>
-  <?php endif; ?>
 
   <div class="row">
     <?php while($kantin = $result->fetch_assoc()): ?>
@@ -317,22 +360,32 @@ $recent_orders = $stmt_recent->get_result();
   </div>
 </div>
 
-<!-- Footer Navigation -->
-<div class="footer-nav">
-  <div class="container text-center">
-    <a href="dashboard.php" class="active">
-      <i class="fas fa-home me-1"></i>Beranda
-    </a>
-    <a href="status_pesanan.php">
-      <i class="fas fa-list me-1"></i>Status Pesanan
-    </a>
-  </div>
-</div>
+<!-- Floating Chat Button -->
+<button class="floating-chat" onclick="openChat()" title="Chat dengan Penjual & Kasir">
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Chat bubble -->
+    <path d="M 3 10 C 3 6.134 6.134 3 10 3 H 20 C 21.657 3 23 4.343 23 6 V 16 C 23 17.657 21.657 19 20 19 H 13 L 7 23 L 7 19 C 5.343 19 4 17.657 4 16 V 10" 
+          fill="white" stroke="white" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <!-- Chat dots -->
+    <circle cx="8" cy="11" r="1.5" fill="#28a745"/>
+    <circle cx="12" cy="11" r="1.5" fill="#28a745"/>
+    <circle cx="16" cy="11" r="1.5" fill="#28a745"/>
+  </svg>
+</button>
 
 <!-- Bootstrap 5 JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Font Awesome -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<script>
+  function openChat() {
+    // Untuk sekarang, tampilkan alert. Nanti akan diintegrasikan dengan sistem chat real-time
+    alert('Chat akan dibuka dengan Penjual & Kasir secara real-time.\n\nFitur ini sedang dikembangkan dengan WebSocket/Socket.io untuk komunikasi real-time.');
+    // Dapat diganti dengan:
+    // window.location.href = 'chat.php';
+  }
+</script>
 
 </body>
 </html>

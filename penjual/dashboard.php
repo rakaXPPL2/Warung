@@ -81,14 +81,97 @@ $username = $_SESSION['username'];
     body {
       font-family: 'Poppins', sans-serif;
       background-color: #f8f9fa;
-      padding-bottom: 80px;
+      padding-top: 80px;
     }
-    .header-custom {
+    
+    /* Navbar Styling */
+    .navbar-custom {
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+    
+    .navbar-brand {
+      font-weight: 700;
+      color: white !important;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .logo-svg {
+      width: 45px;
+      height: 45px;
       background: white;
-      padding: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px;
+    }
+    
+    .navbar-nav .nav-link {
+      color: rgba(255, 255, 255, 0.9) !important;
+      font-weight: 600;
+      margin: 0 10px;
+      padding: 8px 16px !important;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+    
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+      background: rgba(255, 255, 255, 0.2);
+      color: white !important;
+    }
+    
+    .navbar-custom .d-flex {
+      gap: 10px;
+    }
+    
+    .user-info {
+      color: white !important;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .btn-logout {
+      background: rgba(255, 255, 255, 0.2) !important;
+      border: 2px solid white !important;
+      color: white !important;
+      font-weight: 600;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      padding: 8px 16px !important;
+    }
+    
+    .btn-logout:hover {
+      background: white !important;
+      color: #28a745 !important;
+    }
+    
+    .header-custom {
+      background: transparent;
+      padding: 0;
+      box-shadow: none;
       margin-bottom: 20px;
     }
+    
+    .container-main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+    
     .stats-card {
       background: white;
       border-radius: 15px;
@@ -113,6 +196,7 @@ $username = $_SESSION['username'];
       color: #6c757d;
       font-weight: 500;
     }
+    
     .order-card {
       background: white;
       border-radius: 15px;
@@ -129,6 +213,8 @@ $username = $_SESSION['username'];
       justify-content: space-between;
       align-items: center;
       margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
     .order-number {
       font-size: 24px;
@@ -146,16 +232,19 @@ $username = $_SESSION['username'];
     .status-proses { background: #d1ecf1; color: #0c5460; }
     .status-selesai { background: #d4edda; color: #155724; }
     .status-diambil { background: #e2e3e5; color: #383d41; }
+    
     .detail-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 10px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #28a745;
       font-size: 14px;
-      border-bottom: 1px solid #f8f9fa;
     }
-    .detail-row:last-child {
-      border-bottom: none;
-    }
+    
     .items {
       background: #f8f9fa;
       padding: 15px;
@@ -166,84 +255,156 @@ $username = $_SESSION['username'];
     .item-row {
       display: flex;
       justify-content: space-between;
-      padding: 5px 0;
+      padding: 8px 0;
+      border-bottom: 1px solid white;
+      color: #495057;
     }
+    
+    .item-row:last-child {
+      border-bottom: none;
+    }
+    
     .btn-custom {
       border-radius: 25px;
-      padding: 10px 20px;
+      padding: 12px 24px;
       font-weight: 600;
       border: none;
       cursor: pointer;
-      margin-right: 10px;
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      color: white;
+      transition: all 0.3s ease;
     }
-    .btn-proses { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; }
-    .btn-selesai { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; }
-    .btn-ambil { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; }
+    
+    .btn-custom:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+    }
+    
     .note-field {
       width: 100%;
       padding: 10px;
       border: 1px solid #ddd;
       border-radius: 10px;
       margin-bottom: 10px;
+      font-family: 'Poppins', sans-serif;
     }
+    
     .no-orders {
       text-align: center;
-      padding: 50px;
-      color: #6c757d;
-    }
-    .footer-nav {
+      padding: 60px 20px;
       background: white;
-      border-top: 1px solid #e9ecef;
-      padding: 15px 0;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      z-index: 1000;
-      box-shadow: 0 -6px 18px rgba(0,0,0,0.05);
-    }
-    .footer-nav a {
-      text-decoration: none;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      margin: 20px 0;
       color: #6c757d;
-      font-weight: 500;
-      padding: 10px 20px;
-      border-radius: 25px;
+    }
+    
+    .no-orders svg {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+    
+    .no-orders h4 {
+      color: #28a745;
+      margin-bottom: 10px;
+    }
+    
+    /* Floating Chat Button */
+    .floating-chat {
+      position: fixed;
+      bottom: 30px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
       transition: all 0.3s ease;
-      margin: 0 5px;
+      z-index: 999;
+      border: none;
+      padding: 0;
     }
-    .footer-nav a.active {
-      background: #28a745;
-      color: white;
+    
+    .floating-chat:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 35px rgba(40, 167, 69, 0.4);
     }
-    .footer-nav a:hover {
-      background: #28a745;
-      color: white;
-      transform: translateY(-2px);
+    
+    .floating-chat svg {
+      width: 30px;
+      height: 30px;
+      filter: drop-shadow(0 0 2px rgba(0,0,0,0.1));
     }
   </style>
 </head>
 <body>
 
-<!-- Header -->
-<div class="header-custom">
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom">
   <div class="container">
-    <div class="d-flex justify-content-between align-items-center">
-      <div>
-        <h1 class="mb-0">Kantin Saya</h1>
-        <small class="text-muted">Dashboard Kantin</small>
+    <a class="navbar-brand" href="dashboard.php">
+      <div class="logo-svg">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <!-- Bowl -->
+          <path d="M 20 40 Q 20 60 50 65 Q 80 60 80 40" fill="none" stroke="#28a745" stroke-width="3" stroke-linecap="round"/>
+          <!-- Spoon -->
+          <ellipse cx="35" cy="25" rx="8" ry="12" fill="#28a745"/>
+          <line x1="35" y1="37" x2="35" y2="50" stroke="#28a745" stroke-width="2" stroke-linecap="round"/>
+          <!-- Fork -->
+          <line x1="65" y1="20" x2="65" y2="48" stroke="#28a745" stroke-width="2" stroke-linecap="round"/>
+          <line x1="58" y1="48" x2="72" y2="48" stroke="#28a745" stroke-width="2"/>
+          <circle cx="59" cy="50" r="1.5" fill="#28a745"/>
+          <circle cx="65" cy="50" r="1.5" fill="#28a745"/>
+          <circle cx="71" cy="50" r="1.5" fill="#28a745"/>
+          <!-- Rice bowl element -->
+          <circle cx="50" cy="45" r="12" fill="#FFD700" opacity="0.6"/>
+        </svg>
       </div>
-      <div class="d-flex align-items-center">
-        <span class="me-3">Halo, <?= htmlspecialchars($username) ?></span>
-        <a href="../logout.php" class="btn btn-outline-danger btn-sm rounded-pill">
+      <span>Warung Ku</span>
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="dashboard.php">
+            <i class="fas fa-home me-1"></i>Beranda
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="menu.php">
+            <i class="fas fa-utensils me-1"></i>Menu
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="profile.php">
+            <i class="fas fa-user me-1"></i>Profil
+          </a>
+        </li>
+      </ul>
+      
+      <div class="d-flex align-items-center gap-2 ms-3">
+        <span class="user-info">
+          <i class="fas fa-user-circle"></i><?= htmlspecialchars($username) ?>
+        </span>
+        <a href="../logout.php" class="btn btn-logout">
           <i class="fas fa-sign-out-alt me-1"></i>Logout
         </a>
       </div>
     </div>
   </div>
-</div>
+</nav>
 
-<div class="container">
+<div class="container-main">
   <!-- Statistics -->
   <div class="row mb-4">
     <div class="col-md-4 mb-3">
@@ -354,25 +515,29 @@ $username = $_SESSION['username'];
   <?php endif; ?>
 </div>
 
-<!-- Footer Navigation -->
-<div class="footer-nav">
-  <div class="container text-center">
-    <a href="dashboard.php" class="active">
-      <i class="fas fa-home me-1"></i>Beranda
-    </a>
-    <a href="menu.php">
-      <i class="fas fa-utensils me-1"></i>Menu
-    </a>
-    <a href="profile.php">
-      <i class="fas fa-user me-1"></i>Profil
-    </a>
-  </div>
-</div>
+<!-- Floating Chat Button -->
+<button class="floating-chat" onclick="openChat()" title="Chat dengan Pembeli">
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Chat bubble -->
+    <path d="M 3 10 C 3 6.134 6.134 3 10 3 H 20 C 21.657 3 23 4.343 23 6 V 16 C 23 17.657 21.657 19 20 19 H 13 L 7 23 L 7 19 C 5.343 19 4 17.657 4 16 V 10" 
+          fill="white" stroke="white" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <!-- Chat dots -->
+    <circle cx="8" cy="11" r="1.5" fill="#28a745"/>
+    <circle cx="12" cy="11" r="1.5" fill="#28a745"/>
+    <circle cx="16" cy="11" r="1.5" fill="#28a745"/>
+  </svg>
+</button>
 
 <!-- Bootstrap 5 JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Font Awesome -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<script>
+  function openChat() {
+    alert('Chat akan dibuka dengan Pembeli secara real-time.\n\nFitur ini sedang dikembangkan dengan WebSocket/Socket.io untuk komunikasi real-time.');
+  }
+</script>
 
 </body>
 </html>
